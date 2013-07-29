@@ -1,0 +1,62 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:design="clr-namespace:WorkflowWorklist.ViewModels.Design"
+             xmlns:local="clr-namespace:WorkflowWorklist.Views"
+             x:Class="WorkflowWorklist.Views.WorklistControl"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance {x:Type design:DesignWorklistVm}, IsDesignTimeCreatable=True}"
+             d:DesignHeight="900" d:DesignWidth="400">
+	<UserControl.Resources>
+		<DataTemplate x:Key="WorkItemTemplate">
+			<local:WorkItemControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+		</DataTemplate>
+	</UserControl.Resources>
+
+    <Border BorderBrush="{DynamicResource ItemBorder}" BorderThickness="1">
+
+
+        <DockPanel LastChildFill="True" >
+
+            <StackPanel Margin="2" HorizontalAlignment="Center" Orientation="Horizontal" DockPanel.Dock="Top">
+
+                <Button 
+                        Content="Add"
+                        Margin="5"
+                        Grid.ColumnSpan="3"
+                        Command="{Binding Add}"/>
+
+                <Button 
+                        Content="Start" 
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Margin="5"
+                        Command="{Binding Start}"/>
+
+                <Button 
+                        Content="Stop" 
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="5"
+                        Command="{Binding Stop}"/>
+
+                <Button 
+                        Content="Clear" 
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Margin="5"
+                        Command="{Binding Clear}"/>
+
+            </StackPanel>
+
+            <TextBox Margin="2" DockPanel.Dock="Top" Text="{Binding Message}" />
+
+            <ListView ItemsSource="{Binding WorkItemVMs}" ItemTemplate="{DynamicResource WorkItemTemplate}" />
+
+        </DockPanel>
+        
+        
+	</Border>
+</UserControl>
