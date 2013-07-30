@@ -30,6 +30,7 @@ namespace WorkflowWorklist.Models
                     guid: guid,
                     initialConditon: initialConditon, 
                     updateOperation: updateOperation,
+                    workItemStatus: WorkItemStatus.Scheduled,
                     totalIterations: totalIterations
                  );
          }
@@ -42,6 +43,7 @@ namespace WorkflowWorklist.Models
                     guid: Guid.NewGuid(),
                     initialConditon: "initialConditon",
                     updateOperation: s=>s+"_step",
+                    workItemStatus: WorkItemStatus.Scheduled,
                     totalIterations: 5
                  );
         }
@@ -55,6 +57,7 @@ namespace WorkflowWorklist.Models
                 Guid guid,
                 T initialConditon, 
                 Func<T, T> updateOperation, 
+                WorkItemStatus workItemStatus,
                 int totalIterations
             )
         {
@@ -63,6 +66,7 @@ namespace WorkflowWorklist.Models
             _totalIterations = totalIterations;
             _updateOperation = updateOperation;
             _initialConditon = initialConditon;
+            WorkItemStatus = workItemStatus;
         }
 
         private readonly T _initialConditon;
@@ -115,6 +119,12 @@ namespace WorkflowWorklist.Models
             get { return CurrentConditon; }
         }
 
+        public WorkItemStatus WorkItemStatus
+        {
+            get;
+            private set;
+        }
+
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         public CancellationTokenSource CancellationTokenSource
         {
@@ -123,7 +133,13 @@ namespace WorkflowWorklist.Models
 
         public async Task<object> RunAsync()
         {
+            if (WorkItemStatus != WorkItemStatus.Scheduled)
+            {
+                return CurrentConditon;
+            }
+
             CurrentConditon = InitialConditon;
+            WorkItemStatus = WorkItemStatus.Running;
 
             for (_currentIteration = 0; (CurrentIteration < TotalIterations); _currentIteration++)
             {
@@ -148,6 +164,12 @@ namespace WorkflowWorklist.Models
 
         public void Cancel()
         {
+            if (WorkItemStatus != WorkItemStatus.Running)
+            {
+                WorkItemStatus = WorkItemStatus.Cancelled;
+                return;
+            }
+
             CancellationTokenSource.Cancel();
         }
     }

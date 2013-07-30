@@ -57,7 +57,12 @@ namespace WorkflowWorklist.Models
                 );
         }
 
-        public void Push(IWorkItem workItem)
+        public void Cancel(Guid taskId)
+        {
+            throw new NotImplementedException();
+        }
+
+        void Push(IWorkItem workItem)
         {
             _queue.Enqueue(workItem);
             _worklistEvent.OnNext(new WorklistEventArgs(this, workItem, WorklistEventType.ItemScheduled, string.Empty));
@@ -112,7 +117,8 @@ namespace WorkflowWorklist.Models
 
         async void QueueHandler()
         {
-            _worklistEvent.OnNext(new WorklistEventArgs(this, null, WorklistEventType.Started, string.Empty));
+            _worklistEvent.OnNext(new WorklistEventArgs(this, WorkItemInfo.Empty, WorklistEventType.Started, string.Empty));
+
             do
             {
                 if (!_queue.TryDequeue(out _currentWorkItem))
@@ -121,7 +127,7 @@ namespace WorkflowWorklist.Models
                     break;
                 }
 
-                _currentWorkItem.OnProgressChanged.Subscribe
+                CurrentWorkItem.OnProgressChanged.Subscribe
                     (
                         i =>
                             _worklistEvent.OnNext
@@ -137,6 +143,12 @@ namespace WorkflowWorklist.Models
 
                 try
                 {
+                    if (CurrentWorkItem.WorkItemStatus != WorkItemStatus.Scheduled)
+                    {
+                        _worklistEvent.OnNext(new WorklistEventArgs(this, CurrentWorkItem, WorklistEventType.ItemCancelled, string.Empty));
+                        continue;
+                    }
+
                     _worklistEvent.OnNext(new WorklistEventArgs(this, CurrentWorkItem, WorklistEventType.ItemStarted, string.Empty));
 
                     await CurrentWorkItem.RunAsync();
@@ -157,7 +169,7 @@ namespace WorkflowWorklist.Models
 
             } while (IsRunning);
 
-            _worklistEvent.OnNext(new WorklistEventArgs(this, null, WorklistEventType.Stopped, string.Empty));
+            _worklistEvent.OnNext(new WorklistEventArgs(this, WorkItemInfo.Empty, WorklistEventType.Stopped, string.Empty));
         }
 
         public void Dispose()

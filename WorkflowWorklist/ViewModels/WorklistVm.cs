@@ -119,6 +119,20 @@ namespace WorkflowWorklist.ViewModels
             }
         }
 
+        private ICommand _clean;
+        public ICommand Clean
+        {
+            get
+            {
+                return _clean ?? (_clean = new RelayCommand
+                    (
+                        o => Worklist.CancelAll(),
+                        o => (Worklist != null) && Worklist.WorkItems.Any()
+                    )
+                );
+            }
+        }
+
         private ICommand _clear;
         public ICommand Clear
         {

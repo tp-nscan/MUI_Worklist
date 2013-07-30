@@ -15,7 +15,7 @@ namespace WorkflowWorklist.Models
             Func<T, T> iterativeOp, 
             int iterations
             );
-
+        void Cancel(Guid taskId);
         void CancelCurrent();
         void CancelAll();
         void Start();

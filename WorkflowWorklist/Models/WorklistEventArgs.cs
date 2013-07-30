@@ -34,16 +34,4 @@
             get { return _worklist; }
         }
     }
-
-    public enum WorklistEventType
-    {
-       ItemCancelled,
-       ItemCompleted,
-       ItemError,
-       ItemScheduled,
-       ItemStarted,
-       ItemUpdated,
-       Started,
-       Stopped
-    }
 }

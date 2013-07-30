@@ -71,8 +71,10 @@
     <Compile Include="Models\IWorklist.cs" />
     <Compile Include="Models\LogEventArgs.cs" />
     <Compile Include="Models\ProgressEventArgs.cs" />
+    <Compile Include="Models\WorkItemStatus.cs" />
     <Compile Include="Models\Worklist.cs" />
     <Compile Include="Models\WorklistEventArgs.cs" />
+    <Compile Include="Models\WorklistEventType.cs" />
     <Compile Include="ViewModels\Design\DesignWorkItemVm.cs" />
     <Compile Include="ViewModels\Design\DesignWorklistVm.cs" />
     <Compile Include="ViewModels\WorkItemVm.cs" />

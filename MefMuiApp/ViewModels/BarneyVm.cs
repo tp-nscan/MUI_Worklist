@@ -8,7 +8,7 @@ using WorkflowWorklist.Models;
 namespace MefMuiApp.ViewModels
 {
     [Export]
-    public class BarneyVm : NotifyPropertyChanged
+    public class BarneyVm : NotifyPropertyChanged, IPartImportsSatisfiedNotification
     {
         private string _name = "Barney";
         public string Name
@@ -31,7 +31,7 @@ namespace MefMuiApp.ViewModels
                     {
                         Worklist.PushIterative
                         (
-                            name: "name",
+                            name: "from barney",
                             guid: (_guid = Guid.NewGuid()),
                             initialCondidtion: "hi",
                             iterativeOp: s =>
@@ -49,6 +49,29 @@ namespace MefMuiApp.ViewModels
             }
         }
 
+        private string _result;
+        public string Result
+        {
+            get { return _result; }
+            set
+            {
+                _result = value;
+                OnPropertyChanged("Result");
+            }
+        }
+
         private Guid _guid = Guid.Empty;
+        public void OnImportsSatisfied()
+        {
+            Worklist.OnWorklistEvent.Subscribe(HandleWorklistNotice);
+        }
+
+        void HandleWorklistNotice(WorklistEventArgs e)
+        {
+            if (e.WorkItemInfo.Guid == _guid)
+            {
+                Result = (string) e.WorkItemInfo.Result;
+            }
+        }
     }
 }
