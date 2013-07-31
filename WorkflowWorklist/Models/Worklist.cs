@@ -57,7 +57,7 @@ namespace WorkflowWorklist.Models
                 );
         }
 
-        public void Cancel(Guid taskId)
+        public void CancelTask(Guid taskId)
         {
             if ((CurrentWorkItem != null) && (CurrentWorkItem.Guid == taskId))
             {
@@ -81,7 +81,7 @@ namespace WorkflowWorklist.Models
             _worklistEvent.OnNext(new WorklistEventArgs(this, workItem, WorklistEventType.ItemScheduled, string.Empty));
         }
 
-        public void CancelAll()
+        public void CancelAllTasks()
         {
             Stop();
 
@@ -181,7 +181,7 @@ namespace WorkflowWorklist.Models
 
         public void Dispose()
         {
-            CancelAll();
+            CancelAllTasks();
         }
     }
 }

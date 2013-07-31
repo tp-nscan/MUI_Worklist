@@ -187,7 +187,7 @@ namespace WorkflowWorklist.ViewModels
             {
                 return _camcel ?? (_camcel = new RelayCommand
                         (
-                            o => Worklist.Cancel(Guid),
+                            o => Worklist.CancelTask(Guid),
                             o => true
                         )
                     );

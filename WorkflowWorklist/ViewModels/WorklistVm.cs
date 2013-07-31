@@ -126,7 +126,7 @@ namespace WorkflowWorklist.ViewModels
             {
                 return _clean ?? (_clean = new RelayCommand
                     (
-                        o => Worklist.CancelAll(),
+                        o => Worklist.CancelAllTasks(),
                         OnCanExecute
                     )
                 );

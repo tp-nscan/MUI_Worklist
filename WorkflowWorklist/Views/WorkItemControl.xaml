@@ -97,7 +97,7 @@
             <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Message}"/>
             <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Result}"/>
             <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding Status}"/>
-            <Button x:Name="Button" Grid.Row="3" Grid.Column="1" Content="Cancel" Command="{Binding Cancel}" Visibility="Collapsed"/>
+            <Button x:Name="Button" Grid.Row="3" Grid.Column="1" Content="CancelTask" Command="{Binding Cancel}" Visibility="Collapsed"/>
         </Grid>
 		</Grid>
     </Border>
