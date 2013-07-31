@@ -14,7 +14,6 @@ namespace WorkflowWorklist.ViewModels
         Guid Guid { get; }
         bool HasError { get; }
         bool IsRunning { get; }
-        string Message { get; set; }
         string Name { get; }
         string Result { get; }
         string Status { get; }
@@ -63,7 +62,6 @@ namespace WorkflowWorklist.ViewModels
                 return;
             }
 
-            Message = e.Message;
             Result = (string)e.WorkItemInfo.Result;
             OnPropertyChanged("Result");
             UpdateVmState(e.WorklistEventType);
@@ -102,18 +100,6 @@ namespace WorkflowWorklist.ViewModels
         public Guid Guid
         {
             get { return _guid; }
-        }
-
-        private string _message;
-        public string Message
-        {
-            get { return _message; }
-            set
-            {
-                if(_message == value) return;
-                _message = value;
-                OnPropertyChanged("Message");
-            }
         }
 
         private readonly string _name;

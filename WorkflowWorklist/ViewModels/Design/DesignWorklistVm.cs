@@ -11,7 +11,6 @@ namespace WorkflowWorklist.ViewModels.Design
             foreach (var workItem in WorkItems)
             {
                 var workItemVm = WorkItemVm.Make(workItem.Guid, "design name", WorkItemStatus.Scheduled, Worklist);
-                workItemVm.Message = "Message of " + workItem.Name;
                 workItemVm.WorkItemStatus = (WorkItemStatus)((i++) % 6);
                 WorkItemVMs.Add(workItemVm);
                 i++;
