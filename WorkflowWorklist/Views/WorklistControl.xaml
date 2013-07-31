@@ -8,7 +8,7 @@
              x:Class="WorkflowWorklist.Views.WorklistControl"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type design:DesignWorklistVm}, IsDesignTimeCreatable=True}"
-             d:DesignHeight="900" d:DesignWidth="400">
+             d:DesignHeight="1400" d:DesignWidth="400">
 	<UserControl.Resources>
 		<DataTemplate x:Key="WorkItemTemplate">
 			<local:WorkItemControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />

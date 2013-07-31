@@ -10,9 +10,9 @@ namespace WorkflowWorklist.ViewModels.Design
             var i = 0;
             foreach (var workItem in WorkItems)
             {
-                var workItemVm = WorkItemVm.Make(workItem.Guid, "design name", WorkItemVmState.Scheduled, Worklist);
+                var workItemVm = WorkItemVm.Make(workItem.Guid, "design name", WorkItemStatus.Scheduled, Worklist);
                 workItemVm.Message = "Message of " + workItem.Name;
-                workItemVm.WorkItemVmState = (WorkItemVmState) ((i++)%5);
+                workItemVm.WorkItemStatus = (WorkItemStatus)((i++) % 6);
                 WorkItemVMs.Add(workItemVm);
                 i++;
             }
@@ -37,7 +37,6 @@ namespace WorkflowWorklist.ViewModels.Design
                 yield return IterativeWorkItem.Test(5);
                 yield return IterativeWorkItem.Test(6);
                 yield return IterativeWorkItem.Test(7);
-                yield return IterativeWorkItem.Test(8);
             }
         }
     }

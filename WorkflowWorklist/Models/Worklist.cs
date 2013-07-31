@@ -59,7 +59,20 @@ namespace WorkflowWorklist.Models
 
         public void Cancel(Guid taskId)
         {
-            throw new NotImplementedException();
+            if ((CurrentWorkItem != null) && (CurrentWorkItem.Guid == taskId))
+            {
+                CurrentWorkItem.Cancel();
+                return;
+            }
+
+            foreach (var workItem in WorkItems)
+            {
+                if (workItem.Guid == taskId)
+                {
+                    workItem.Cancel();
+                    _worklistEvent.OnNext(new WorklistEventArgs(this, workItem, WorklistEventType.ItemCancelled, string.Empty));
+                }
+            }
         }
 
         void Push(IWorkItem workItem)
@@ -68,18 +81,8 @@ namespace WorkflowWorklist.Models
             _worklistEvent.OnNext(new WorklistEventArgs(this, workItem, WorklistEventType.ItemScheduled, string.Empty));
         }
 
-        public void CancelCurrent()
-        {
-            if (CurrentWorkItem == null)
-                return;
-
-            CurrentWorkItem.Cancel();
-        }
-
         public void CancelAll()
         {
-            if (!IsRunning) return;
-
             Stop();
 
             IWorkItem workItem;
@@ -105,7 +108,10 @@ namespace WorkflowWorklist.Models
 
         public void Stop()
         {
-            CancelCurrent();
+            if (CurrentWorkItem != null)
+            {
+                CurrentWorkItem.Cancel();
+            }
             _isRunning = false;
         }
         
@@ -132,7 +138,8 @@ namespace WorkflowWorklist.Models
                         i =>
                             _worklistEvent.OnNext
                             (
-                                new WorklistEventArgs(
+                                new WorklistEventArgs
+                                    (
                                         this,
                                         _currentWorkItem,
                                         WorklistEventType.ItemStarted,

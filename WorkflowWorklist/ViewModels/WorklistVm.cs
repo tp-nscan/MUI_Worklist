@@ -23,7 +23,7 @@ namespace WorkflowWorklist.ViewModels
             Worklist.OnWorklistEvent.Subscribe(Worklist_WorkListChanged);
             foreach (var workItem in Worklist.WorkItems)
             {
-                WorkItemVMs.Add(WorkItemVm.Make(workItem.Guid, workItem.Name, WorkItemVmState.Scheduled, Worklist));
+                WorkItemVMs.Add(WorkItemVm.Make(workItem.Guid, workItem.Name, WorkItemStatus.Scheduled, Worklist));
             }
         }
 
@@ -47,8 +47,8 @@ namespace WorkflowWorklist.ViewModels
                             WorkItemVm.Make
                                 (
                                     worklistEventArgs.WorkItemInfo.Guid, 
-                                    worklistEventArgs.WorkItemInfo.Name, 
-                                    WorkItemVmState.Scheduled, 
+                                    worklistEventArgs.WorkItemInfo.Name,
+                                    WorkItemStatus.Scheduled, 
                                     worklistEventArgs.Worklist
                                 )
                         );
@@ -135,7 +135,7 @@ namespace WorkflowWorklist.ViewModels
 
         private bool OnCanExecute(object o)
         {
-            return (Worklist != null) && WorkItemVMs.Any(T => T.UnRunnable());
+            return (Worklist != null) && WorkItemVMs.Any();
         }
 
         private ICommand _clear;

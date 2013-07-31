@@ -16,7 +16,6 @@ namespace WorkflowWorklist.Models
             int iterations
             );
         void Cancel(Guid taskId);
-        void CancelCurrent();
         void CancelAll();
         void Start();
         void Stop();

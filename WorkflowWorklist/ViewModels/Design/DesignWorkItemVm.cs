@@ -6,7 +6,7 @@ namespace WorkflowWorklist.ViewModels.Design
     public class DesignWorkItemVm : WorkItemVmImpl
     {
         public DesignWorkItemVm()
-            : base(workItem.Guid, "design name", WorkItemVmState.Scheduled, null)
+            : base(workItem.Guid, "design name", WorkItemStatus.Scheduled, null)
         {
         }
 

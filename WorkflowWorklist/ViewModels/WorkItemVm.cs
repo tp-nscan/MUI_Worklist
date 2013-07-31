@@ -6,15 +6,6 @@ using WorkflowWorklist.Models;
 
 namespace WorkflowWorklist.ViewModels
 {
-    public enum WorkItemVmState
-    {
-        Cancelled = 0,
-        Completed = 1,
-        Error = 2,
-        Running = 3,
-        Scheduled = 4
-    }
-
     public interface IWorkItemVm : INotifyPropertyChanged
     {
         ICommand Cancel { get; }
@@ -28,12 +19,12 @@ namespace WorkflowWorklist.ViewModels
         string Result { get; }
         string Status { get; }
         bool WasRun { get; }
-        WorkItemVmState WorkItemVmState { get; set; }
+        WorkItemStatus WorkItemStatus { get; set; }
     }
 
     public static class WorkItemVm
     {
-        public static IWorkItemVm Make(Guid guid, string name, WorkItemVmState workItemVmState, IWorklist worklist)
+        public static IWorkItemVm Make(Guid guid, string name, WorkItemStatus workItemVmState, IWorklist worklist)
         {
             return new WorkItemVmImpl(guid, name, workItemVmState, worklist);
         }
@@ -46,10 +37,10 @@ namespace WorkflowWorklist.ViewModels
 
     public class WorkItemVmImpl : NotifyPropertyChanged, IWorkItemVm
     {
-        public WorkItemVmImpl(Guid guid, string name, WorkItemVmState workItemVmState, IWorklist worklist)
+        public WorkItemVmImpl(Guid guid, string name, WorkItemStatus workItemStatus, IWorklist worklist)
         {
             _guid = guid;
-            WorkItemVmState = workItemVmState;
+            WorkItemStatus = workItemStatus;
             _worklist = worklist;
             _name = name;
             Worklist.OnWorklistEvent.Subscribe(WorkListEventHandler);
@@ -83,22 +74,22 @@ namespace WorkflowWorklist.ViewModels
             switch (worklistEventType)
             {
                 case WorklistEventType.ItemCancelled:
-                    WorkItemVmState = WorkItemVmState.Cancelled;
+                    WorkItemStatus = WorkItemStatus.Cancelled;
                     break;
                 case WorklistEventType.ItemCompleted:
-                    WorkItemVmState = WorkItemVmState.Completed;
+                    WorkItemStatus = WorkItemStatus.Completed;
                     break;
                 case WorklistEventType.ItemError:
-                    WorkItemVmState = WorkItemVmState.Error;
+                    WorkItemStatus = WorkItemStatus.Error;
                     break;
                 case WorklistEventType.ItemStarted:
-                    WorkItemVmState = WorkItemVmState.Running;
+                    WorkItemStatus = WorkItemStatus.Running;
                     break;
                 case WorklistEventType.ItemScheduled:
-                    WorkItemVmState = WorkItemVmState.Scheduled;
+                    WorkItemStatus = WorkItemStatus.Scheduled;
                     break;
                 case WorklistEventType.ItemUpdated:
-                    WorkItemVmState = WorkItemVmState.Running;
+                    WorkItemStatus = WorkItemStatus.Running;
                     break;
                 case WorklistEventType.Started:
                     break;
@@ -135,32 +126,32 @@ namespace WorkflowWorklist.ViewModels
 
         public bool Cancelled
         {
-            get { return WorkItemVmState == WorkItemVmState.Cancelled; }
+            get { return WorkItemStatus == WorkItemStatus.Cancelled; }
         }
 
         public bool Completed
         {
-            get { return WorkItemVmState == WorkItemVmState.Completed; }
+            get { return WorkItemStatus == WorkItemStatus.Completed; }
         }
 
         public bool IsRunning
         {
-            get { return WorkItemVmState == WorkItemVmState.Running; }
+            get { return WorkItemStatus == WorkItemStatus.Running; }
         }
 
         public bool HasError
         {
-            get { return WorkItemVmState == WorkItemVmState.Error; }
+            get { return WorkItemStatus == WorkItemStatus.Error; }
         }
 
-        private WorkItemVmState _workItemVmState;
-        public WorkItemVmState WorkItemVmState
+        private WorkItemStatus _workItemStatus;
+        public WorkItemStatus WorkItemStatus
         {
-            get { return _workItemVmState; }
+            get { return _workItemStatus; }
             set
             {
-                if (_workItemVmState == value) return;
-                _workItemVmState = value;
+                if (_workItemStatus == value) return;
+                _workItemStatus = value;
                 OnPropertyChanged("Cancelled");
                 OnPropertyChanged("Completed");
                 OnPropertyChanged("IsRunning");
@@ -173,7 +164,7 @@ namespace WorkflowWorklist.ViewModels
 
         public string Status
         {
-            get { return WorkItemVmState.ToString(); }
+            get { return WorkItemStatus.ToString(); }
         }
 
         public bool WasRun
@@ -181,11 +172,11 @@ namespace WorkflowWorklist.ViewModels
             get
             {
                 return
-                    (WorkItemVmState == WorkItemVmState.Error)
+                    (WorkItemStatus == WorkItemStatus.Error)
                     ||
-                    (WorkItemVmState == WorkItemVmState.Cancelled)
+                    (WorkItemStatus == WorkItemStatus.Cancelled)
                     ||
-                    (WorkItemVmState == WorkItemVmState.Completed);
+                    (WorkItemStatus == WorkItemStatus.Completed);
             }
         }
 
@@ -196,8 +187,8 @@ namespace WorkflowWorklist.ViewModels
             {
                 return _camcel ?? (_camcel = new RelayCommand
                         (
-                            o => Worklist.CancelCurrent(),
-                            o => IsRunning
+                            o => Worklist.Cancel(Guid),
+                            o => true
                         )
                     );
             }
