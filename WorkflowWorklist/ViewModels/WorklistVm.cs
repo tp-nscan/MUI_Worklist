@@ -119,12 +119,12 @@ namespace WorkflowWorklist.ViewModels
             }
         }
 
-        private ICommand _clean;
-        public ICommand Clean
+        private ICommand _cancelAll;
+        public ICommand CancelAll
         {
             get
             {
-                return _clean ?? (_clean = new RelayCommand
+                return _cancelAll ?? (_cancelAll = new RelayCommand
                     (
                         o => Worklist.CancelAllTasks(),
                         OnCanExecute
