@@ -10,7 +10,7 @@
              d:DesignHeight="100" d:DesignWidth="300"
              commonUi:StateHelper.State="{Binding Path=Status, Mode=OneWay}">
 
-    <Border x:Name="RootBorder" BorderBrush="{DynamicResource ItemBorder}" Margin="1" BorderThickness="2" Opacity="0.8">
+    <Border x:Name="RootBorder" BorderBrush="Pink" Margin="1" BorderThickness="2" Opacity="0.8">
 		
 		<VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WorkItemStatus">
@@ -56,7 +56,20 @@
                         </DoubleAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
-                <VisualState x:Name="Scheduled"/>
+                <VisualState x:Name="Scheduled">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Button">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush)" Storyboard.TargetName="RootBorder">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <SolidColorBrush Color="Brown"/>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
