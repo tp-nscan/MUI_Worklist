@@ -23,7 +23,7 @@ namespace WorkflowWorklist.ViewModels
             Worklist.OnWorklistEvent.Subscribe(Worklist_WorkListChanged);
             foreach (var workItem in Worklist.WorkItems)
             {
-                WorkItemVMs.Add(WorkItemVm.Make(workItem.Guid, workItem.Name, WorkItemStatus.Scheduled, Worklist));
+                WorkItemVMs.Add(WorkItemViewVm.Schedule(workItem.Guid, workItem.Name, Worklist));
             }
         }
 
@@ -44,11 +44,10 @@ namespace WorkflowWorklist.ViewModels
                 case WorklistEventType.ItemScheduled:
                     WorkItemVMs.Add
                         (
-                            WorkItemVm.Make
+                            WorkItemViewVm.Schedule
                                 (
                                     worklistEventArgs.WorkItemInfo.Guid, 
                                     worklistEventArgs.WorkItemInfo.Name,
-                                    WorkItemStatus.Scheduled, 
                                     worklistEventArgs.Worklist
                                 )
                         );
@@ -63,14 +62,14 @@ namespace WorkflowWorklist.ViewModels
         [Import]
         private Worklist Worklist { get; set; }
 
-        private ObservableCollection<IWorkItemVm> _workItemVMs;
-        public ObservableCollection<IWorkItemVm> WorkItemVMs
+        private ObservableCollection<IWorkItemViewVm> _workItemVMs;
+        public ObservableCollection<IWorkItemViewVm> WorkItemVMs
         {
             get
             {
                 if (_workItemVMs == null)
                 {
-                    _workItemVMs = new ObservableCollection<IWorkItemVm>();
+                    _workItemVMs = new ObservableCollection<IWorkItemViewVm>();
                     _workItemVMs.CollectionChanged += (s, e) => OnPropertyChanged("TaskCount");
                 }
                 return _workItemVMs;
@@ -139,7 +138,8 @@ namespace WorkflowWorklist.ViewModels
         }
 
         private ICommand _clear;
-        public ICommand Clear
+
+        public ICommand ClearUnrunnable
         {
             get
             {
@@ -153,7 +153,7 @@ namespace WorkflowWorklist.ViewModels
                                 WorkItemVMs.Remove(workItemVm);
                             }
                         },
-                        o => (Worklist != null) &&  WorkItemVMs.Any(T => T.UnRunnable())
+                        o => (Worklist != null) && WorkItemVMs.Any(T => T.UnRunnable())
                     )
                 );
             }

@@ -25,36 +25,27 @@
                 <Button 
                         Content="Add"
                         Margin="5"
-                        Grid.ColumnSpan="3"
                         Command="{Binding Add}"/>
 
                 <Button 
                         Content="Start" 
-                        Grid.Row="2"
-                        Grid.Column="0"
                         Margin="5"
                         Command="{Binding Start}"/>
 
                 <Button 
-                        Content="Stop" 
-                        Grid.Row="2"
-                        Grid.Column="1"
+                        Content="Stop"
                         Margin="5"
                         Command="{Binding Stop}"/>
 
                 <Button 
                         Content="Cancel All" 
-                        Grid.Row="2"
-                        Grid.Column="2"
                         Margin="5"
                         Command="{Binding CancelAll}"/>
 
                 <Button 
-                        Content="Clear" 
-                        Grid.Row="2"
-                        Grid.Column="2"
+                        Content="Clean" 
                         Margin="5"
-                        Command="{Binding Clear}"/>
+                        Command="{Binding ClearUnrunnable}"/>
 
             </StackPanel>
 

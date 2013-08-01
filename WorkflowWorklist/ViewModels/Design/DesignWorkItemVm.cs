@@ -3,10 +3,10 @@ using WorkflowWorklist.Models;
 
 namespace WorkflowWorklist.ViewModels.Design
 {
-    public class DesignWorkItemVm : WorkItemVmImpl
+    public class DesignWorkItemViewViewVm : WorkItemViewViewVmImpl
     {
-        public DesignWorkItemVm()
-            : base(workItem.Guid, "design name", WorkItemStatus.Scheduled, null)
+        public DesignWorkItemViewViewVm()
+            : base(workItem.Guid, "design name", null)
         {
         }
 

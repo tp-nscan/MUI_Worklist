@@ -6,7 +6,7 @@
              xmlns:commonUi="clr-namespace:CommonUI;assembly=CommonUI"
              xmlns:design="clr-namespace:WorkflowWorklist.ViewModels.Design"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance {x:Type design:DesignWorkItemVm}, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance {x:Type design:DesignWorkItemViewViewVm}, IsDesignTimeCreatable=True}"
              d:DesignHeight="100" d:DesignWidth="300"
              commonUi:StateHelper.State="{Binding Path=Status, Mode=OneWay}">
 
@@ -94,10 +94,9 @@
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Name}"/>
             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Guid}"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Message}"/>
-            <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Result}"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Result.Result}"/>
             <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding Status}"/>
-            <Button x:Name="Button" Grid.Row="3" Grid.Column="1" Content="CancelTask" Command="{Binding Cancel}" Visibility="Collapsed"/>
+            <Button x:Name="Button" Grid.Row="3" Grid.Column="1" Content="Cancel" Command="{Binding Cancel}" Visibility="Collapsed"/>
         </Grid>
 		</Grid>
     </Border>

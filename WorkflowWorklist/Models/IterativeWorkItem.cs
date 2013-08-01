@@ -8,7 +8,6 @@ namespace WorkflowWorklist.Models
     public interface IIterativeWorkItem<out T> : IWorkItem
     {
         T InitialConditon { get; }
-        T CurrentConditon { get; }
         int TotalIterations { get; }
         int CurrentIteration { get; }
     }
@@ -75,7 +74,7 @@ namespace WorkflowWorklist.Models
             get { return _initialConditon; }
         }
 
-        public T CurrentConditon { get; private set; }
+        T CurrentConditon { get; set; }
 
         private readonly int _totalIterations;
         public int TotalIterations
@@ -114,11 +113,6 @@ namespace WorkflowWorklist.Models
             get { return _progressChanged; }
         }
 
-        public object Result
-        {
-            get { return CurrentConditon; }
-        }
-
         public WorkItemStatus WorkItemStatus
         {
             get;
@@ -155,7 +149,8 @@ namespace WorkflowWorklist.Models
                         (
                             taskId: Guid,
                             message: string.Format("Step {0} of {1} completed", _currentIteration + 1, TotalIterations),
-                            data: CurrentConditon
+                            data: CurrentConditon,
+                            step: _currentIteration
                         ));
             }
 

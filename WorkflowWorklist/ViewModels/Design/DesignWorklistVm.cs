@@ -10,7 +10,7 @@ namespace WorkflowWorklist.ViewModels.Design
             var i = 0;
             foreach (var workItem in WorkItems)
             {
-                var workItemVm = WorkItemVm.Make(workItem.Guid, "design name", WorkItemStatus.Scheduled, Worklist);
+                var workItemVm = WorkItemViewVm.Schedule(workItem.Guid, "design name", Worklist);
                 workItemVm.WorkItemStatus = (WorkItemStatus)((i++) % 6);
                 WorkItemVMs.Add(workItemVm);
                 i++;

@@ -6,7 +6,7 @@ using WorkflowWorklist.Models;
 
 namespace WorkflowWorklist.ViewModels
 {
-    public interface IWorkItemVm : INotifyPropertyChanged
+    public interface IWorkItemViewVm : INotifyPropertyChanged
     {
         ICommand Cancel { get; }
         bool Cancelled { get; }
@@ -15,33 +15,51 @@ namespace WorkflowWorklist.ViewModels
         bool HasError { get; }
         bool IsRunning { get; }
         string Name { get; }
-        string Result { get; }
+        IWorkItemInfo Result { get; }
         string Status { get; }
         bool WasRun { get; }
         WorkItemStatus WorkItemStatus { get; set; }
     }
 
-    public static class WorkItemVm
+    public static class WorkItemViewVm
     {
-        public static IWorkItemVm Make(Guid guid, string name, WorkItemStatus workItemVmState, IWorklist worklist)
+        public static IWorkItemViewVm Create(IWorklist worklist)
         {
-            return new WorkItemVmImpl(guid, name, workItemVmState, worklist);
+            return new WorkItemViewViewVmImpl(worklist);
         }
 
-        public static bool UnRunnable(this IWorkItemVm workItemVm)
+        public static IWorkItemViewVm Schedule(Guid guid, string name, IWorklist worklist)
         {
-            return workItemVm.HasError || workItemVm.Completed || workItemVm.Cancelled;
+            return new WorkItemViewViewVmImpl(guid, name, worklist);
+        }
+
+        public static bool UnRunnable(this IWorkItemViewVm workItemViewVm)
+        {
+            return workItemViewVm.HasError || workItemViewVm.Completed || workItemViewVm.Cancelled;
         }
     }
 
-    public class WorkItemVmImpl : NotifyPropertyChanged, IWorkItemVm
+    public class WorkItemViewViewVmImpl : NotifyPropertyChanged, IWorkItemViewVm
     {
-        public WorkItemVmImpl(Guid guid, string name, WorkItemStatus workItemStatus, IWorklist worklist)
+        public WorkItemViewViewVmImpl(Guid guid, string name, IWorklist worklist)
         {
             _guid = guid;
-            WorkItemStatus = workItemStatus;
+            WorkItemStatus = WorkItemStatus.Scheduled;
             _worklist = worklist;
             _name = name;
+            Worklist.OnWorklistEvent.Subscribe(WorkListEventHandler);
+        }
+
+        public void SetTaskInfo(Guid guid, string name)
+        {
+            _guid = guid;
+            _name = name;
+        }
+
+        public WorkItemViewViewVmImpl(IWorklist worklist)
+        {
+            WorkItemStatus = WorkItemStatus.None;
+            _worklist = worklist;
             Worklist.OnWorklistEvent.Subscribe(WorkListEventHandler);
         }
 
@@ -62,7 +80,7 @@ namespace WorkflowWorklist.ViewModels
                 return;
             }
 
-            Result = (string)e.WorkItemInfo.Result;
+            Result = e.WorkItemInfo;
             OnPropertyChanged("Result");
             UpdateVmState(e.WorklistEventType);
         }
@@ -96,19 +114,19 @@ namespace WorkflowWorklist.ViewModels
             }
         }
 
-        private readonly Guid _guid;
+        private Guid _guid;
         public Guid Guid
         {
             get { return _guid; }
         }
 
-        private readonly string _name;
+        private string _name;
         public string Name
         {
             get { return _name; }
         }
 
-        public string Result { get; private set; }
+        public IWorkItemInfo Result { get; private set; }
 
         public bool Cancelled
         {

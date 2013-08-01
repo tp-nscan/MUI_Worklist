@@ -11,9 +11,9 @@
 	<Grid Style="{StaticResource ContentRoot}" >
 
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="3*"/>
 				<ColumnDefinition Width="6"/>
-				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="2*"/>
 			</Grid.ColumnDefinitions>
 
 			<GridSplitter Grid.Column="1" />
