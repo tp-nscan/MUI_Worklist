@@ -7,7 +7,7 @@ using WorkflowWorklist.Models;
 
 namespace WorkflowWorklist.ViewModels
 {
-    public interface IWorkItemViewVm : INotifyPropertyChanged
+    public interface IWorkItemMonitorVm : INotifyPropertyChanged
     {
         ICommand Cancel { get; }
         bool Cancelled { get; }
@@ -22,34 +22,34 @@ namespace WorkflowWorklist.ViewModels
         WorkItemStatus WorkItemStatus { get; set; }
     }
 
-    public static class WorkItemViewVm
+    public static class WorkItemMonitorVm
     {
-        public static IWorkItemViewVm Create(IWorklist worklist)
+        public static IWorkItemMonitorVm Create(IWorklist worklist)
         {
-            return new WorkItemViewVmImpl(worklist);
+            return new WorkItemMonitorVmImpl(worklist);
         }
 
-        public static IWorkItemViewVm Schedule(Guid guid, string name, IWorklist worklist)
+        public static IWorkItemMonitorVm Schedule(Guid guid, string name, IWorklist worklist)
         {
-            return new WorkItemViewVmImpl(guid, name, worklist);
+            return new WorkItemMonitorVmImpl(guid, name, worklist);
         }
 
-        public static bool UnRunnable(this IWorkItemViewVm workItemViewVm)
+        public static bool UnRunnable(this IWorkItemMonitorVm workItemMonitorVm)
         {
-            return workItemViewVm.HasError || workItemViewVm.Completed || workItemViewVm.Cancelled;
+            return workItemMonitorVm.HasError || workItemMonitorVm.Completed || workItemMonitorVm.Cancelled;
         }
     }
 
-    public class WorkItemViewVmImpl : NotifyPropertyChanged, IWorkItemViewVm
+    public class WorkItemMonitorVmImpl : NotifyPropertyChanged, IWorkItemMonitorVm
     {
-        public WorkItemViewVmImpl(IWorklist worklist)
+        public WorkItemMonitorVmImpl(IWorklist worklist)
         {
             WorkItemStatus = WorkItemStatus.None;
             _worklist = worklist;
             Worklist.OnWorklistEvent.Subscribe(WorkListEventHandler);
         }
 
-        public WorkItemViewVmImpl(Guid guid, string name, IWorklist worklist)
+        public WorkItemMonitorVmImpl(Guid guid, string name, IWorklist worklist)
         {
             _guid = guid;
             WorkItemStatus = WorkItemStatus.Scheduled;

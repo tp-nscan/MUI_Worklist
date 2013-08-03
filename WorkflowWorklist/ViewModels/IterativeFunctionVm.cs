@@ -76,7 +76,7 @@ namespace WorkflowWorklist.ViewModels
         }
 
         readonly Subject<IterativeFunction<T>> _submitFunctionEvent = new Subject<IterativeFunction<T>>();
-        public IObservable<IterativeFunction<T>> OnWorklistEvent { get { return _submitFunctionEvent; } }
+        public IObservable<IterativeFunction<T>> SubmitFunctionEvent { get { return _submitFunctionEvent; } }
 
         private ICommand _submit;
         public ICommand Submit

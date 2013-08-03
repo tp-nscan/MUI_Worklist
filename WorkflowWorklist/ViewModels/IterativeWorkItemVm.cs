@@ -10,10 +10,10 @@ namespace WorkflowWorklist.ViewModels
             Worklist = worklist;
         }
 
-        private IWorkItemViewVm _workItemViewVm;
-        private IWorkItemViewVm WorkItemViewVm
+        private IWorkItemMonitorVm _workItemMonitorVm;
+        private IWorkItemMonitorVm WorkItemMonitorVm
         {
-            get { return _workItemViewVm; }
+            get { return _workItemMonitorVm; }
         }
 
         IWorklist Worklist { get; set; }

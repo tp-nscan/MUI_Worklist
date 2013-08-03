@@ -23,7 +23,7 @@ namespace WorkflowWorklist.ViewModels
             Worklist.OnWorklistEvent.Subscribe(Worklist_WorkListChanged);
             foreach (var workItem in Worklist.WorkItems)
             {
-                WorkItemVMs.Add(WorkItemViewVm.Schedule(workItem.Guid, workItem.Name, Worklist));
+                WorkItemVMs.Add(WorkItemMonitorVm.Schedule(workItem.Guid, workItem.Name, Worklist));
             }
         }
 
@@ -44,7 +44,7 @@ namespace WorkflowWorklist.ViewModels
                 case WorklistEventType.ItemScheduled:
                     WorkItemVMs.Add
                         (
-                            WorkItemViewVm.Schedule
+                            WorkItemMonitorVm.Schedule
                                 (
                                     worklistEventArgs.WorkItemInfo.Guid, 
                                     worklistEventArgs.WorkItemInfo.Name,
@@ -62,14 +62,14 @@ namespace WorkflowWorklist.ViewModels
         [Import]
         private Worklist Worklist { get; set; }
 
-        private ObservableCollection<IWorkItemViewVm> _workItemVMs;
-        public ObservableCollection<IWorkItemViewVm> WorkItemVMs
+        private ObservableCollection<IWorkItemMonitorVm> _workItemVMs;
+        public ObservableCollection<IWorkItemMonitorVm> WorkItemVMs
         {
             get
             {
                 if (_workItemVMs == null)
                 {
-                    _workItemVMs = new ObservableCollection<IWorkItemViewVm>();
+                    _workItemVMs = new ObservableCollection<IWorkItemMonitorVm>();
                     _workItemVMs.CollectionChanged += (s, e) => OnPropertyChanged("TaskCount");
                 }
                 return _workItemVMs;

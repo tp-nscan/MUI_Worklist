@@ -6,7 +6,7 @@
              xmlns:commonUi="clr-namespace:CommonUI;assembly=CommonUI"
              xmlns:design="clr-namespace:WorkflowWorklist.ViewModels.Design"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance {x:Type design:DesignWorkItemViewVm}, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance {x:Type design:DesignWorkItemMonitorVm}, IsDesignTimeCreatable=True}"
              d:DesignHeight="100" d:DesignWidth="300"
              commonUi:StateHelper.State="{Binding Path=Status, Mode=OneWay}">
 

@@ -8,16 +8,13 @@
     <Grid >
         
         <StackPanel>
-            
-            <TextBlock Text="{Binding Name}"/>
 
             <Button 
                         Content="Add"
                         Margin="5"
-                        Grid.ColumnSpan="3"
-                        Command="{Binding Add}"/>
+                        Command="{Binding StringCatFunctionVm.Submit}"/>
 
-            <TextBlock Text="{Binding Status}"/>
+            <TextBlock Text="{Binding StringResultVm.Result}"/>
         </StackPanel>
         
        

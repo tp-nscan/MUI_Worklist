@@ -3,9 +3,9 @@ using WorkflowWorklist.Models;
 
 namespace WorkflowWorklist.ViewModels.Design
 {
-    public class DesignWorkItemViewVm : WorkItemViewVmImpl
+    public class DesignWorkItemMonitorVm : WorkItemMonitorVmImpl
     {
-        public DesignWorkItemViewVm()
+        public DesignWorkItemMonitorVm()
             : base(workItem.Guid, "design Message", null)
         {
         }

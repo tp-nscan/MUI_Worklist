@@ -142,7 +142,7 @@ namespace WorkflowWorklist.Models
                                     (
                                         this,
                                         _currentWorkItem.ToWorkItemInfo(i.Data, i.Step, WorkItemStatus.Running),
-                                        WorklistEventType.ItemStarted,
+                                        WorklistEventType.ItemUpdated,
                                         i.Message
                                     )
                             )

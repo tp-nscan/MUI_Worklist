@@ -11,44 +11,12 @@ namespace MefMuiApp.ViewModels
     [Export]
     public class BarneyVm : NotifyPropertyChanged, IPartImportsSatisfiedNotification
     {
-        private string _name = "Barney";
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
-
         [Import]
         private Worklist Worklist { get; set; }
 
-        private ICommand _add;
-        public ICommand Add
-        {
-            get
-            {
-                return _add ?? (_add = new RelayCommand
-                (
-                    o =>
-                    {
-                        Worklist.PushIterative
-                        (
-                            name: "from barney",
-                            guid: (_guid = Guid.NewGuid()),
-                            initialCondidtion: "hi",
-                            iterativeOp: s =>
-                            {
-                                Thread.Sleep(1000);
-                                return s + "_next";
-                            },
-                            iterations: 6
-                        );
+        public StringResultVm StringResultVm { get; set; }
 
-                        Worklist.Start();
-                    },
-                    o => true
-                ));
-            }
-        }
+        public StringCatFunctionVm StringCatFunctionVm { get; set; }
 
         private string _result;
         public string Result
@@ -64,83 +32,35 @@ namespace MefMuiApp.ViewModels
         private Guid _guid = Guid.Empty;
         public void OnImportsSatisfied()
         {
-            Worklist.OnWorklistEvent.Subscribe(HandleWorklistNotice);
-        }
+            StringResultVm = new StringResultVm();
+            StringResultVm.SetWorklist(Worklist);
 
-        void HandleWorklistNotice(WorklistEventArgs e)
-        {
-            if (e.WorkItemInfo.Guid == _guid)
+            StringCatFunctionVm = new StringCatFunctionVm();
+            StringCatFunctionVm.InitialCondition = "bb";
+            StringCatFunctionVm.Iterations = 6;
+            StringCatFunctionVm.Name = "Barney";
+            StringCatFunctionVm.UpdateFunction = s =>
             {
-                Result = (string)e.WorkItemInfo.Result;
-            }
+                Thread.Sleep(1000);
+                return s + "_next";
+            };
+
+            StringCatFunctionVm.SubmitFunctionEvent.Subscribe(SubmitHandler);
         }
+
+        void SubmitHandler(IterativeFunction<string> fun)
+        {
+            Worklist.PushIterative
+            (
+                name: fun.Name,
+                guid: (_guid = fun.Guid),
+                initialCondidtion: fun.InitialCondition,
+                iterativeOp: fun.UpdateFunction,
+                iterations:  fun.Iterations.HasValue ? fun.Iterations.Value : 0
+            );
+
+            Worklist.Start();
+        }
+
     }
-
-    //[Export]
-    //public class BarneyVm : NotifyPropertyChanged, IPartImportsSatisfiedNotification
-    //{
-    //    private string _name = "Barney";
-    //    public string Message
-    //    {
-    //        get { return _name; }
-    //        set { _name = value; }
-    //    }
-
-    //    [Import]
-    //    private Worklist Worklist { get; set; }
-
-    //    private ICommand _add;
-    //    public ICommand Add
-    //    {
-    //        get
-    //        {
-    //            return _add ?? (_add = new RelayCommand
-    //            (
-    //                o =>
-    //                {
-    //                    Worklist.PushIterative
-    //                    (
-    //                        Message: "from barney",
-    //                        guid: (_guid = Guid.NewGuid()),
-    //                        initialCondidtion: "hi",
-    //                        iterativeOp: s =>
-    //                        {
-    //                            Thread.Sleep(1000);
-    //                            return s + "_next";
-    //                        },
-    //                        iterations: 6
-    //                    );
-
-    //                    Worklist.Start();            
-    //                },
-    //                o => true
-    //            ));
-    //        }
-    //    }
-
-    //    private string _result;
-    //    public string Result
-    //    {
-    //        get { return _result; }
-    //        set
-    //        {
-    //            _result = value;
-    //            OnPropertyChanged("Result");
-    //        }
-    //    }
-
-    //    private Guid _guid = Guid.Empty;
-    //    public void OnImportsSatisfied()
-    //    {
-    //        Worklist.OnWorklistEvent.Subscribe(HandleWorklistNotice);
-    //    }
-
-    //    void HandleWorklistNotice(WorklistEventArgs e)
-    //    {
-    //        if (e.WorkItemInfo.Guid == _guid)
-    //        {
-    //            Result = (string) e.WorkItemInfo.Result;
-    //        }
-    //    }
-    //}
 }
