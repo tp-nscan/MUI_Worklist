@@ -16,8 +16,8 @@
                         Margin="5"
                         Grid.ColumnSpan="3"
                         Command="{Binding Add}"/>
-            
-            <TextBlock Text="{Binding Result}"/>
+
+            <TextBlock Text="{Binding Status}"/>
         </StackPanel>
         
        

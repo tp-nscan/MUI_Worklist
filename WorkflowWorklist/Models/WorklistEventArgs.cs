@@ -2,11 +2,18 @@
 {
     public class WorklistEventArgs
     {
-        public WorklistEventArgs(IWorklist worklist, IWorkItemInfo workItemInfo, WorklistEventType worklistEventType)
+        public WorklistEventArgs(IWorklist worklist, IWorkItemInfo workItemInfo, WorklistEventType worklistEventType, string message)
         {
             _worklist = worklist;
             _worklistEventType = worklistEventType;
+            _message = message;
             _workItemInfo = workItemInfo;
+        }
+
+        private readonly string _message;
+        public string Message
+        {
+            get { return _message; }
         }
 
         private readonly WorklistEventType _worklistEventType;

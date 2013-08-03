@@ -28,9 +28,9 @@ namespace WorkflowWorklist.Models
             }
         }
 
-        public static IWorkItemInfo ToWorkItemInfo(this IWorkItem workItem, object result, int step)
+        public static IWorkItemInfo ToWorkItemInfo(this IWorkItem workItem, object result, int step, WorkItemStatus status)
         {
-            return Make(workItem.Guid, workItem.Name, result, step, workItem.WorkItemStatus);
+            return Make(workItem.Guid, workItem.Name, result, step, status);
         }
     }
 

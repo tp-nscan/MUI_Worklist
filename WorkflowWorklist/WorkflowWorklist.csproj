@@ -68,6 +68,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\IterativeFunction.cs" />
     <Compile Include="Models\IWorkItem.cs" />
     <Compile Include="Models\IterativeWorkItem.cs" />
     <Compile Include="Models\IWorkItemInfo.cs" />

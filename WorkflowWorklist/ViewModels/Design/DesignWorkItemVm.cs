@@ -3,16 +3,16 @@ using WorkflowWorklist.Models;
 
 namespace WorkflowWorklist.ViewModels.Design
 {
-    public class DesignWorkItemViewViewVm : WorkItemViewViewVmImpl
+    public class DesignWorkItemViewVm : WorkItemViewVmImpl
     {
-        public DesignWorkItemViewViewVm()
-            : base(workItem.Guid, "design name", null)
+        public DesignWorkItemViewVm()
+            : base(workItem.Guid, "design Message", null)
         {
         }
 
         private static readonly IWorkItem workItem = IterativeWorkItem.Make
             (
-                name: "design name",
+                name: "design Message",
                 guid: Guid.NewGuid(),
                 initialConditon: "initial condition",
                 updateOperation: s=>s,

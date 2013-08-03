@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reactive.Subjects;
 using System.Windows.Input;
 using FirstFloor.ModernUI.Presentation;
 using WorkflowWorklist.Models;
@@ -15,7 +16,7 @@ namespace WorkflowWorklist.ViewModels
         bool HasError { get; }
         bool IsRunning { get; }
         string Name { get; }
-        IWorkItemInfo Result { get; }
+        string Message { get; }
         string Status { get; }
         bool WasRun { get; }
         WorkItemStatus WorkItemStatus { get; set; }
@@ -25,12 +26,12 @@ namespace WorkflowWorklist.ViewModels
     {
         public static IWorkItemViewVm Create(IWorklist worklist)
         {
-            return new WorkItemViewViewVmImpl(worklist);
+            return new WorkItemViewVmImpl(worklist);
         }
 
         public static IWorkItemViewVm Schedule(Guid guid, string name, IWorklist worklist)
         {
-            return new WorkItemViewViewVmImpl(guid, name, worklist);
+            return new WorkItemViewVmImpl(guid, name, worklist);
         }
 
         public static bool UnRunnable(this IWorkItemViewVm workItemViewVm)
@@ -39,9 +40,16 @@ namespace WorkflowWorklist.ViewModels
         }
     }
 
-    public class WorkItemViewViewVmImpl : NotifyPropertyChanged, IWorkItemViewVm
+    public class WorkItemViewVmImpl : NotifyPropertyChanged, IWorkItemViewVm
     {
-        public WorkItemViewViewVmImpl(Guid guid, string name, IWorklist worklist)
+        public WorkItemViewVmImpl(IWorklist worklist)
+        {
+            WorkItemStatus = WorkItemStatus.None;
+            _worklist = worklist;
+            Worklist.OnWorklistEvent.Subscribe(WorkListEventHandler);
+        }
+
+        public WorkItemViewVmImpl(Guid guid, string name, IWorklist worklist)
         {
             _guid = guid;
             WorkItemStatus = WorkItemStatus.Scheduled;
@@ -54,13 +62,6 @@ namespace WorkflowWorklist.ViewModels
         {
             _guid = guid;
             _name = name;
-        }
-
-        public WorkItemViewViewVmImpl(IWorklist worklist)
-        {
-            WorkItemStatus = WorkItemStatus.None;
-            _worklist = worklist;
-            Worklist.OnWorklistEvent.Subscribe(WorkListEventHandler);
         }
 
         private readonly IWorklist _worklist;
@@ -80,38 +81,8 @@ namespace WorkflowWorklist.ViewModels
                 return;
             }
 
-            Result = e.WorkItemInfo;
-            OnPropertyChanged("Result");
-            UpdateVmState(e.WorklistEventType);
-        }
-
-        void UpdateVmState(WorklistEventType worklistEventType)
-        {
-            switch (worklistEventType)
-            {
-                case WorklistEventType.ItemCancelled:
-                    WorkItemStatus = WorkItemStatus.Cancelled;
-                    break;
-                case WorklistEventType.ItemCompleted:
-                    WorkItemStatus = WorkItemStatus.Completed;
-                    break;
-                case WorklistEventType.ItemError:
-                    WorkItemStatus = WorkItemStatus.Error;
-                    break;
-                case WorklistEventType.ItemStarted:
-                    WorkItemStatus = WorkItemStatus.Running;
-                    break;
-                case WorklistEventType.ItemScheduled:
-                    WorkItemStatus = WorkItemStatus.Scheduled;
-                    break;
-                case WorklistEventType.ItemUpdated:
-                    WorkItemStatus = WorkItemStatus.Running;
-                    break;
-                case WorklistEventType.Started:
-                    break;
-                case WorklistEventType.Stopped:
-                    break;
-            }
+            Message = e.Message;
+            WorkItemStatus = e.WorkItemInfo.WorkItemStatus;
         }
 
         private Guid _guid;
@@ -126,7 +97,16 @@ namespace WorkflowWorklist.ViewModels
             get { return _name; }
         }
 
-        public IWorkItemInfo Result { get; private set; }
+        private string _message;
+        public string Message
+        {
+            get { return _message; }
+            private set
+            {
+                _message = value;
+                OnPropertyChanged("Message");
+            }
+        }
 
         public bool Cancelled
         {

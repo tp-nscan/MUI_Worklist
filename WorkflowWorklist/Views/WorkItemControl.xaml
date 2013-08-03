@@ -6,7 +6,7 @@
              xmlns:commonUi="clr-namespace:CommonUI;assembly=CommonUI"
              xmlns:design="clr-namespace:WorkflowWorklist.ViewModels.Design"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance {x:Type design:DesignWorkItemViewViewVm}, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance {x:Type design:DesignWorkItemViewVm}, IsDesignTimeCreatable=True}"
              d:DesignHeight="100" d:DesignWidth="300"
              commonUi:StateHelper.State="{Binding Path=Status, Mode=OneWay}">
 
@@ -74,30 +74,29 @@
         </VisualStateManager.VisualStateGroups>
 
 		<Grid>
-		<Canvas>
-			<Canvas.Background>
-				<SolidColorBrush Color="{DynamicResource AccentColor}" />
-			</Canvas.Background>
-		</Canvas>
+		    <Canvas>
+			    <Canvas.Background>
+				    <SolidColorBrush Color="{DynamicResource AccentColor}" />
+			    </Canvas.Background>
+		    </Canvas>
 
-        <Grid Margin="4,8">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+            <Grid Margin="4,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Name}"/>
-            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Guid}"/>
-            <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Result.Result}"/>
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding Status}"/>
-            <Button x:Name="Button" Grid.Row="3" Grid.Column="1" Content="Cancel" Command="{Binding Cancel}" Visibility="Collapsed"/>
-        </Grid>
+                <TextBlock Grid.Row="0" Grid.Column="0" Margin="2" Text="{Binding Name}"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Margin="2" Text="{Binding Guid}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Margin="2" Text="{Binding Status}"/>
+                <Button x:Name="Button" Grid.Row="1" Grid.Column="1" Content="Cancel" Command="{Binding Cancel}" Visibility="Collapsed"/>
+                <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Margin="2" Text="{Binding Message}"/>
+            </Grid>
 		</Grid>
     </Border>
 </UserControl>

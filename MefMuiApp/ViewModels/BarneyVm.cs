@@ -7,6 +7,7 @@ using WorkflowWorklist.Models;
 
 namespace MefMuiApp.ViewModels
 {
+
     [Export]
     public class BarneyVm : NotifyPropertyChanged, IPartImportsSatisfiedNotification
     {
@@ -42,7 +43,7 @@ namespace MefMuiApp.ViewModels
                             iterations: 6
                         );
 
-                        Worklist.Start();            
+                        Worklist.Start();
                     },
                     o => true
                 ));
@@ -70,8 +71,76 @@ namespace MefMuiApp.ViewModels
         {
             if (e.WorkItemInfo.Guid == _guid)
             {
-                Result = (string) e.WorkItemInfo.Result;
+                Result = (string)e.WorkItemInfo.Result;
             }
         }
     }
+
+    //[Export]
+    //public class BarneyVm : NotifyPropertyChanged, IPartImportsSatisfiedNotification
+    //{
+    //    private string _name = "Barney";
+    //    public string Message
+    //    {
+    //        get { return _name; }
+    //        set { _name = value; }
+    //    }
+
+    //    [Import]
+    //    private Worklist Worklist { get; set; }
+
+    //    private ICommand _add;
+    //    public ICommand Add
+    //    {
+    //        get
+    //        {
+    //            return _add ?? (_add = new RelayCommand
+    //            (
+    //                o =>
+    //                {
+    //                    Worklist.PushIterative
+    //                    (
+    //                        Message: "from barney",
+    //                        guid: (_guid = Guid.NewGuid()),
+    //                        initialCondidtion: "hi",
+    //                        iterativeOp: s =>
+    //                        {
+    //                            Thread.Sleep(1000);
+    //                            return s + "_next";
+    //                        },
+    //                        iterations: 6
+    //                    );
+
+    //                    Worklist.Start();            
+    //                },
+    //                o => true
+    //            ));
+    //        }
+    //    }
+
+    //    private string _result;
+    //    public string Result
+    //    {
+    //        get { return _result; }
+    //        set
+    //        {
+    //            _result = value;
+    //            OnPropertyChanged("Result");
+    //        }
+    //    }
+
+    //    private Guid _guid = Guid.Empty;
+    //    public void OnImportsSatisfied()
+    //    {
+    //        Worklist.OnWorklistEvent.Subscribe(HandleWorklistNotice);
+    //    }
+
+    //    void HandleWorklistNotice(WorklistEventArgs e)
+    //    {
+    //        if (e.WorkItemInfo.Guid == _guid)
+    //        {
+    //            Result = (string) e.WorkItemInfo.Result;
+    //        }
+    //    }
+    //}
 }

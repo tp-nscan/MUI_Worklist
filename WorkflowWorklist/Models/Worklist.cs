@@ -70,7 +70,7 @@ namespace WorkflowWorklist.Models
                 if (workItem.Guid == taskId)
                 {
                     workItem.Cancel();
-                    _worklistEvent.OnNext(new WorklistEventArgs(this, workItem.ToWorkItemInfo(null, 0), WorklistEventType.ItemCancelled));
+                    _worklistEvent.OnNext(new WorklistEventArgs(this, workItem.ToWorkItemInfo(null, 0, WorkItemStatus.Cancelled), WorklistEventType.ItemCancelled, string.Empty));
                 }
             }
         }
@@ -78,7 +78,7 @@ namespace WorkflowWorklist.Models
         void Push(IWorkItem workItem)
         {
             _queue.Enqueue(workItem);
-            _worklistEvent.OnNext(new WorklistEventArgs(this, workItem.ToWorkItemInfo(null, 0), WorklistEventType.ItemScheduled));
+            _worklistEvent.OnNext(new WorklistEventArgs(this, workItem.ToWorkItemInfo(null, 0, WorkItemStatus.Scheduled), WorklistEventType.ItemScheduled, string.Empty));
         }
 
         public void CancelAllTasks()
@@ -88,7 +88,7 @@ namespace WorkflowWorklist.Models
             IWorkItem workItem;
             while (_queue.TryDequeue(out workItem))
             {
-                _worklistEvent.OnNext(new WorklistEventArgs(this, workItem.ToWorkItemInfo(null, 0), WorklistEventType.ItemCancelled));
+                _worklistEvent.OnNext(new WorklistEventArgs(this, workItem.ToWorkItemInfo(null, 0, WorkItemStatus.Cancelled), WorklistEventType.ItemCancelled, string.Empty));
             }
         }
 
@@ -123,7 +123,7 @@ namespace WorkflowWorklist.Models
 
         async void QueueHandler()
         {
-            _worklistEvent.OnNext(new WorklistEventArgs(this, WorkItemInfo.Empty, WorklistEventType.Started));
+            _worklistEvent.OnNext(new WorklistEventArgs(this, WorkItemInfo.Empty, WorklistEventType.Started, string.Empty));
 
             do
             {
@@ -141,8 +141,9 @@ namespace WorkflowWorklist.Models
                                 new WorklistEventArgs
                                     (
                                         this,
-                                        _currentWorkItem.ToWorkItemInfo(i.Data, i.Step),
-                                        WorklistEventType.ItemStarted
+                                        _currentWorkItem.ToWorkItemInfo(i.Data, i.Step, WorkItemStatus.Running),
+                                        WorklistEventType.ItemStarted,
+                                        i.Message
                                     )
                             )
                     );
@@ -151,31 +152,31 @@ namespace WorkflowWorklist.Models
                 {
                     if (CurrentWorkItem.WorkItemStatus != WorkItemStatus.Scheduled)
                     {
-                        _worklistEvent.OnNext(new WorklistEventArgs(this, CurrentWorkItem.ToWorkItemInfo(null, 0), WorklistEventType.ItemCancelled));
+                        _worklistEvent.OnNext(new WorklistEventArgs(this, CurrentWorkItem.ToWorkItemInfo(null, 0, WorkItemStatus.Cancelled), WorklistEventType.ItemCancelled, string.Empty));
                         continue;
                     }
 
-                    _worklistEvent.OnNext(new WorklistEventArgs(this, CurrentWorkItem.ToWorkItemInfo(null, 0), WorklistEventType.ItemStarted));
+                    _worklistEvent.OnNext(new WorklistEventArgs(this, CurrentWorkItem.ToWorkItemInfo(null, 0, WorkItemStatus.Running), WorklistEventType.ItemStarted, string.Empty));
 
                     var result = await CurrentWorkItem.RunAsync();
 
-                    _worklistEvent.OnNext(new WorklistEventArgs(this, CurrentWorkItem.ToWorkItemInfo(result, 0), WorklistEventType.ItemCompleted));
+                    _worklistEvent.OnNext(new WorklistEventArgs(this, CurrentWorkItem.ToWorkItemInfo(result, 0, WorkItemStatus.Completed), WorklistEventType.ItemCompleted, string.Empty));
                 }
                 catch (TaskCanceledException)
                 {
-                    _worklistEvent.OnNext(new WorklistEventArgs(this, CurrentWorkItem.ToWorkItemInfo(null, 0), WorklistEventType.ItemCancelled));
+                    _worklistEvent.OnNext(new WorklistEventArgs(this, CurrentWorkItem.ToWorkItemInfo(null, 0, WorkItemStatus.Cancelled), WorklistEventType.ItemCancelled, string.Empty));
                     continue;
                 }
                 catch (Exception)
                 {
-                    _worklistEvent.OnNext(new WorklistEventArgs(this, CurrentWorkItem.ToWorkItemInfo(null, 0), WorklistEventType.ItemError));
+                    _worklistEvent.OnNext(new WorklistEventArgs(this, CurrentWorkItem.ToWorkItemInfo(null, 0, WorkItemStatus.Error), WorklistEventType.ItemError, string.Empty));
                 }
 
                 _currentWorkItem = null;
 
             } while (IsRunning);
 
-            _worklistEvent.OnNext(new WorklistEventArgs(this, WorkItemInfo.Empty, WorklistEventType.Stopped));
+            _worklistEvent.OnNext(new WorklistEventArgs(this, WorkItemInfo.Empty, WorklistEventType.Stopped, string.Empty));
         }
 
         public void Dispose()
