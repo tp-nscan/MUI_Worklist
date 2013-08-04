@@ -84,6 +84,7 @@
     <Compile Include="ViewModels\IterativeFunctionVm.cs" />
     <Compile Include="ViewModels\IterativeWorkItemVm.cs" />
     <Compile Include="ViewModels\WorkItemMonitorVm.cs" />
+    <Compile Include="ViewModels\WorklistIterativeClientVm.cs" />
     <Compile Include="ViewModels\WorklistResultVm.cs" />
     <Compile Include="ViewModels\WorklistVm.cs" />
     <Compile Include="Views\WorkItemControl.xaml.cs">

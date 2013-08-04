@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Input;
 using FirstFloor.ModernUI.Presentation;
 using System.Reactive.Subjects;
@@ -6,7 +7,20 @@ using WorkflowWorklist.Models;
 
 namespace WorkflowWorklist.ViewModels
 {
-    public abstract class IterativeFunctionVm<T> : NotifyPropertyChanged where T : class 
+    public interface IIterativeFunctionVm<T> : INotifyPropertyChanged where T : class
+    {
+        Guid Guid { get; }
+        int? Iterations { get; set; }
+        T InitialCondition { get; set; }
+        string Name { get; set; }
+        Func<T, T> UpdateFunction { get; set; }
+        bool WasSubmitted { get; set; }
+        bool CanSubmit { get; }
+        IObservable<IterativeFunction<T>> SubmitFunctionEvent { get; }
+        ICommand Submit { get; }
+    }
+
+    public abstract class IterativeFunctionVm<T> : NotifyPropertyChanged, IIterativeFunctionVm<T> where T : class 
     {
         protected IterativeFunctionVm()
         {
@@ -27,7 +41,7 @@ namespace WorkflowWorklist.ViewModels
             {
                 IterativeFunction.Iterations = value;
                 OnPropertyChanged("Iterations");
-                OnPropertyChanged("IsValid");
+                OnPropertyChanged("CanSubmit");
             }
         }
 
@@ -38,7 +52,7 @@ namespace WorkflowWorklist.ViewModels
             {
                 IterativeFunction.InitialCondition = value;
                 OnPropertyChanged("InitialCondition");
-                OnPropertyChanged("IsValid");
+                OnPropertyChanged("CanSubmit");
             }
         }
 
@@ -49,7 +63,7 @@ namespace WorkflowWorklist.ViewModels
             {
                 IterativeFunction.Name = value;
                 OnPropertyChanged("Message");
-                OnPropertyChanged("IsValid");
+                OnPropertyChanged("CanSubmit");
             }
         }
 
@@ -60,17 +74,37 @@ namespace WorkflowWorklist.ViewModels
             {
                 IterativeFunction.UpdateFunction = value;
                 OnPropertyChanged("UpdateFunction");
-                OnPropertyChanged("IsValid");
+                OnPropertyChanged("CanSubmit");
             }
         }
 
-        public bool IsValid
+        private bool _wasSubmitted;
+        public bool WasSubmitted
+        {
+            get { return _wasSubmitted; }
+            set
+            {
+                _wasSubmitted = value;
+                OnPropertyChanged("WasSubmitted");
+                OnPropertyChanged("CanSubmit");
+            }
+        }
+
+        public bool CanSubmit
         {
             get
             {
-                return IterativeFunction.Iterations.HasValue 
+                return IsComplete && (! WasSubmitted);
+            }
+        }
+
+        bool IsComplete
+        {
+            get
+            {
+                return IterativeFunction.Iterations.HasValue
                         && (IterativeFunction.InitialCondition != null)
-                        && (! String.IsNullOrEmpty(IterativeFunction.Name)) 
+                        && (!String.IsNullOrEmpty(IterativeFunction.Name))
                         && (IterativeFunction.UpdateFunction != null);
             }
         }
@@ -86,7 +120,7 @@ namespace WorkflowWorklist.ViewModels
                 return _submit ?? (_submit = new RelayCommand
                         (
                             o => _submitFunctionEvent.OnNext(IterativeFunction),
-                            o => IsValid
+                            o => CanSubmit
                         )
                     );
             }

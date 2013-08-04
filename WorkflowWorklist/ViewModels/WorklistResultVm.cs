@@ -7,29 +7,38 @@ namespace WorkflowWorklist.ViewModels
 {
     public interface IWorklistResultVm : INotifyPropertyChanged
     {
-        void SetWorklist(IWorklist worklist);
+        Guid Guid { get; }
+        IWorklist Worklist { get; }
     }
 
     public abstract class WorklistResultVm<T> : NotifyPropertyChanged, IWorklistResultVm
     {
-        public void SetWorklist(IWorklist worklist)
+        protected WorklistResultVm(IWorklist worklist, Guid guid)
         {
-            Worklst = worklist;
+            _worklist = worklist;
+            Worklist.OnWorklistEvent.Subscribe(Worklist_WorkListChanged);
+            _guid = guid;
         }
 
-        private IWorklist _worklst;
-        private IWorklist Worklst
+        private readonly Guid _guid;
+        public Guid Guid
         {
-            get { return _worklst; }
-            set
-            {
-                _worklst = value;
-                _worklst.OnWorklistEvent.Subscribe(Worklist_WorkListChanged);
-            }
+            get { return _guid; }
+        }
+
+        private readonly IWorklist _worklist;
+        public IWorklist Worklist
+        {
+            get { return _worklist; }
         }
 
         void Worklist_WorkListChanged(WorklistEventArgs worklistEventArgs)
         {
+            if (worklistEventArgs.WorkItemInfo.Guid != Guid)
+            {
+                return;
+            }
+
             switch (worklistEventArgs.WorklistEventType)
             {
                 case WorklistEventType.Started:

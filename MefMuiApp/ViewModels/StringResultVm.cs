@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WorkflowWorklist.Models;
 using WorkflowWorklist.ViewModels;
 
 namespace MefMuiApp.ViewModels
 {
     public class StringResultVm : WorklistResultVm<string>
     {
+        public StringResultVm(IWorklist worklist, Guid guid) : base(worklist, guid)
+        {
+        }
+
         protected override void ProcessResult(string result)
         {
             Result = result;
