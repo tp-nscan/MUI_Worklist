@@ -14,46 +14,18 @@ namespace MefMuiApp.ViewModels
         [Import]
         private Worklist Worklist { get; set; }
 
-        public StringResultVm StringResultVm { get; set; }
-
-        public IIterativeFunctionVm<string> StringCatFunctionVm { get; set; }
-
-        private string _result;
-
-        public string Result
-        {
-            get { return _result; }
-            set
-            {
-                _result = value;
-                OnPropertyChanged("Result");
-            }
-        }
-
         public void OnImportsSatisfied()
         {
-            StringCatFunctionVm = IterativeFunctionVm;
-            StringCatFunctionVm.SubmitFunctionEvent.Subscribe(SubmitHandler);
-
-            StringResultVm = new StringResultVm(Worklist, StringCatFunctionVm.Guid);
+            WorklistIterativeClientVm = new WorklistIterativeClientVm<string>
+                (
+                    worklist: Worklist,
+                    iterativeFunctionVm: iterativeFunctionVm,
+                    worklistResultMaker:  (w, g) => new StringResultVm(w, g)
+                );
 
         }
 
-        void SubmitHandler(IterativeFunction<string> fun)
-        {
-            Worklist.PushIterative
-            (
-                name: fun.Name,
-                guid: fun.Guid,
-                initialCondidtion: fun.InitialCondition,
-                iterativeOp: fun.UpdateFunction,
-                iterations:  fun.Iterations.HasValue ? fun.Iterations.Value : 0
-            );
-
-            Worklist.Start();
-        }
-
-        IIterativeFunctionVm<string> IterativeFunctionVm = new StringCatFunctionVm
+        static readonly IIterativeFunctionVm<string> iterativeFunctionVm = new StringCatFunctionVm
         {
             InitialCondition = "bb",
             Iterations = 6,

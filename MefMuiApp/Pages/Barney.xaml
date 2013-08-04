@@ -10,11 +10,12 @@
         <StackPanel>
 
             <Button 
-                        Content="Add"
-                        Margin="5"
-                        Command="{Binding StringCatFunctionVm.Submit}"/>
+                Content="Add"
+                Margin="5"
+                Command="{Binding WorklistIterativeClientVm.IterativeFunctionVm.Submit}"/>
 
-            <TextBlock Text="{Binding StringResultVm.Result}"/>
+            <TextBlock Text="{Binding WorklistIterativeClientVm.WorklistResultVm.Result}"/>
+            
         </StackPanel>
         
        
