@@ -4,7 +4,7 @@ using WorkflowWorklist.ViewModels;
 
 namespace MefMuiApp.ViewModels
 {
-    public class StringResultVm : WorklistResultVm<string>
+    public class StringResultVm : WorkItemResultVm<string>
     {
         public StringResultVm(IWorklist worklist, Guid guid) : base(worklist, guid)
         {

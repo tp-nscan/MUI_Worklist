@@ -1,21 +1,62 @@
-﻿using FirstFloor.ModernUI.Presentation;
+﻿using System;
+using FirstFloor.ModernUI.Presentation;
 using WorkflowWorklist.Models;
 
 namespace WorkflowWorklist.ViewModels
 {
-    public abstract class IterativeWorkItemVm<T> : NotifyPropertyChanged where T : class
+    public class IterativeWorkItemVm<T> : NotifyPropertyChanged, IWorkItemControllerVm where T : class
     {
-        protected IterativeWorkItemVm(IWorklist worklist)
+        public IterativeWorkItemVm
+            (
+                IWorklist worklist,
+                IIterativeFunctionVm<T> iterativeFunctionVm,
+                Func<IWorklist, Guid, IWorkItemMonitorVm> worklistMonitorMaker,
+                Func<IWorklist, Guid, IWorkItemResultVm> worklistResultMaker 
+            )
         {
-            Worklist = worklist;
+            _iterativeFunctionVm = iterativeFunctionVm;
+            IterativeFunctionVm.SubmitFunctionEvent.Subscribe(SubmitHandler);
+            _workItemMonitorVm = worklistMonitorMaker(worklist, IterativeFunctionVm.Guid);
+            _workItemResultVm = worklistResultMaker(worklist, IterativeFunctionVm.Guid);
         }
 
-        private IWorkItemMonitorVm _workItemMonitorVm;
-        private IWorkItemMonitorVm WorkItemMonitorVm
+        private readonly IIterativeFunctionVm<T> _iterativeFunctionVm;
+        public IIterativeFunctionVm<T> IterativeFunctionVm
+        {
+            get { return _iterativeFunctionVm; }
+        }
+
+        private readonly IWorkItemMonitorVm _workItemMonitorVm;
+
+        public ISubmitFunctionVm SubmitFunctionVm
+        {
+            get { return IterativeFunctionVm; }
+        }
+
+        public IWorkItemMonitorVm WorkItemMonitorVm
         {
             get { return _workItemMonitorVm; }
         }
 
-        IWorklist Worklist { get; set; }
+        private readonly IWorkItemResultVm _workItemResultVm;
+        public IWorkItemResultVm WorkItemResultVm
+        {
+            get { return _workItemResultVm; }
+        }
+
+        void SubmitHandler(IterativeFunction<T> fun)
+        {
+            WorkItemResultVm.Worklist.PushIterative
+            (
+                name: fun.Name,
+                guid: fun.Guid,
+                initialCondidtion: fun.InitialCondition,
+                iterativeOp: fun.UpdateFunction,
+                iterations: fun.Iterations.HasValue ? fun.Iterations.Value : 0
+            );
+
+            WorkItemResultVm.Worklist.Start();
+        }
+
     }
 }

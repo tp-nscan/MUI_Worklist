@@ -23,7 +23,12 @@ namespace WorkflowWorklist.ViewModels
             Worklist.OnWorklistEvent.Subscribe(Worklist_WorkListChanged);
             foreach (var workItem in Worklist.WorkItems)
             {
-                WorkItemVMs.Add(WorkItemMonitorVm.Schedule(workItem.Guid, workItem.Name, Worklist));
+                WorkItemVMs.Add(
+                    WorkItemMonitorVm.Schedule
+                    (
+                        workItem.ToWorkItemInfo(null, 0, workItem.WorkItemStatus), 
+                        Worklist
+                    ));
             }
         }
 
@@ -46,8 +51,7 @@ namespace WorkflowWorklist.ViewModels
                         (
                             WorkItemMonitorVm.Schedule
                                 (
-                                    worklistEventArgs.WorkItemInfo.Guid, 
-                                    worklistEventArgs.WorkItemInfo.Name,
+                                    worklistEventArgs.WorkItemInfo,
                                     worklistEventArgs.Worklist
                                 )
                         );

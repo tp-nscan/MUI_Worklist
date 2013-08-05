@@ -6,7 +6,7 @@ namespace WorkflowWorklist.ViewModels.Design
     public class DesignWorkItemMonitorVm : WorkItemMonitorVmImpl
     {
         public DesignWorkItemMonitorVm()
-            : base(workItem.Guid, "design Message", null)
+            : base(workItem.ToWorkItemInfo(null, 0, WorkItemStatus.None), null)
         {
         }
 

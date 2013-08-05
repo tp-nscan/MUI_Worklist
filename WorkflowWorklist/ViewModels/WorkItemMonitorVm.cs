@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Reactive.Subjects;
 using System.Windows.Input;
 using FirstFloor.ModernUI.Presentation;
 using WorkflowWorklist.Models;
@@ -17,21 +16,20 @@ namespace WorkflowWorklist.ViewModels
         bool IsRunning { get; }
         string Name { get; }
         string Message { get; }
-        string Status { get; }
         bool WasRun { get; }
         WorkItemStatus WorkItemStatus { get; set; }
     }
 
     public static class WorkItemMonitorVm
     {
-        public static IWorkItemMonitorVm Create(IWorklist worklist)
+        public static IWorkItemMonitorVm Create(IWorklist worklist, Guid guid)
         {
-            return new WorkItemMonitorVmImpl(worklist);
+            return new WorkItemMonitorVmImpl(guid, worklist);
         }
 
-        public static IWorkItemMonitorVm Schedule(Guid guid, string name, IWorklist worklist)
+        public static IWorkItemMonitorVm Schedule(IWorkItemInfo workItemInfo, IWorklist worklist)
         {
-            return new WorkItemMonitorVmImpl(guid, name, worklist);
+            return new WorkItemMonitorVmImpl(workItemInfo, worklist);
         }
 
         public static bool UnRunnable(this IWorkItemMonitorVm workItemMonitorVm)
@@ -42,26 +40,21 @@ namespace WorkflowWorklist.ViewModels
 
     public class WorkItemMonitorVmImpl : NotifyPropertyChanged, IWorkItemMonitorVm
     {
-        public WorkItemMonitorVmImpl(IWorklist worklist)
+        public WorkItemMonitorVmImpl(Guid guid, IWorklist worklist)
         {
+            _guid = guid;
+            _worklist = worklist;
             WorkItemStatus = WorkItemStatus.None;
-            _worklist = worklist;
             Worklist.OnWorklistEvent.Subscribe(WorkListEventHandler);
         }
 
-        public WorkItemMonitorVmImpl(Guid guid, string name, IWorklist worklist)
+        public WorkItemMonitorVmImpl(IWorkItemInfo workItemInfo, IWorklist worklist)
         {
-            _guid = guid;
-            WorkItemStatus = WorkItemStatus.Scheduled;
+            _guid = workItemInfo.Guid;
+            WorkItemStatus = workItemInfo.WorkItemStatus;
             _worklist = worklist;
-            _name = name;
+            _name = workItemInfo.Name;
             Worklist.OnWorklistEvent.Subscribe(WorkListEventHandler);
-        }
-
-        public void SetTaskInfo(Guid guid, string name)
-        {
-            _guid = guid;
-            _name = name;
         }
 
         private readonly IWorklist _worklist;
@@ -83,9 +76,10 @@ namespace WorkflowWorklist.ViewModels
 
             Message = e.Message;
             WorkItemStatus = e.WorkItemInfo.WorkItemStatus;
+            Name = e.WorkItemInfo.Name;
         }
 
-        private Guid _guid;
+        private readonly Guid _guid;
         public Guid Guid
         {
             get { return _guid; }
@@ -95,6 +89,11 @@ namespace WorkflowWorklist.ViewModels
         public string Name
         {
             get { return _name; }
+            private set
+            {
+                _name = value;
+                OnPropertyChanged("Name");
+            }
         }
 
         private string _message;
@@ -141,15 +140,15 @@ namespace WorkflowWorklist.ViewModels
                 OnPropertyChanged("IsRunning");
                 OnPropertyChanged("HasError");
                 OnPropertyChanged("WasRun");
-                OnPropertyChanged("Status");
+                OnPropertyChanged("WorkItemStatus");
                 CommandManager.InvalidateRequerySuggested();
             }
         }
 
-        public string Status
-        {
-            get { return WorkItemStatus.ToString(); }
-        }
+        //public string Status
+        //{
+        //    get { return WorkItemStatus.ToString(); }
+        //}
 
         public bool WasRun
         {

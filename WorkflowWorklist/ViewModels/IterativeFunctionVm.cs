@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows.Input;
 using FirstFloor.ModernUI.Presentation;
 using System.Reactive.Subjects;
@@ -7,17 +6,11 @@ using WorkflowWorklist.Models;
 
 namespace WorkflowWorklist.ViewModels
 {
-    public interface IIterativeFunctionVm<T> : INotifyPropertyChanged where T : class
+    public interface IIterativeFunctionVm<T> : ISubmitFunctionVm where T : class
     {
-        Guid Guid { get; }
-        int? Iterations { get; set; }
         T InitialCondition { get; set; }
-        string Name { get; set; }
         Func<T, T> UpdateFunction { get; set; }
-        bool WasSubmitted { get; set; }
-        bool CanSubmit { get; }
         IObservable<IterativeFunction<T>> SubmitFunctionEvent { get; }
-        ICommand Submit { get; }
     }
 
     public abstract class IterativeFunctionVm<T> : NotifyPropertyChanged, IIterativeFunctionVm<T> where T : class 

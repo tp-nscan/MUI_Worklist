@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Threading;
 using FirstFloor.ModernUI.Presentation;
 using WorkflowWorklist.Models;
@@ -16,10 +15,11 @@ namespace MefMuiApp.ViewModels
 
         public void OnImportsSatisfied()
         {
-            WorklistIterativeClientVm = new WorklistIterativeClientVm<string>
+            WorklistIterativeClientVm = new IterativeWorkItemVm<string>
                 (
                     worklist: Worklist,
                     iterativeFunctionVm: iterativeFunctionVm,
+                    worklistMonitorMaker: WorkItemMonitorVm.Create,
                     worklistResultMaker:  (w, g) => new StringResultVm(w, g)
                 );
 
@@ -37,8 +37,8 @@ namespace MefMuiApp.ViewModels
             }
         };
 
-        WorklistIterativeClientVm<string> _worklistIterativeClientVm;
-        public WorklistIterativeClientVm<string> WorklistIterativeClientVm
+        IterativeWorkItemVm<string> _worklistIterativeClientVm;
+        public IterativeWorkItemVm<string> WorklistIterativeClientVm
         {
             get { return _worklistIterativeClientVm; }
             set

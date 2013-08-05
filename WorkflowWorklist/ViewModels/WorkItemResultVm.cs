@@ -5,15 +5,15 @@ using WorkflowWorklist.Models;
 
 namespace WorkflowWorklist.ViewModels
 {
-    public interface IWorklistResultVm : INotifyPropertyChanged
+    public interface IWorkItemResultVm : INotifyPropertyChanged
     {
         Guid Guid { get; }
         IWorklist Worklist { get; }
     }
 
-    public abstract class WorklistResultVm<T> : NotifyPropertyChanged, IWorklistResultVm
+    public abstract class WorkItemResultVm<T> : NotifyPropertyChanged, IWorkItemResultVm
     {
-        protected WorklistResultVm(IWorklist worklist, Guid guid)
+        protected WorkItemResultVm(IWorklist worklist, Guid guid)
         {
             _worklist = worklist;
             Worklist.OnWorklistEvent.Subscribe(Worklist_WorkListChanged);
