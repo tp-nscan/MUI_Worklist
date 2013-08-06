@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type design:DesignWorkItemMonitorVm}, IsDesignTimeCreatable=True}"
              d:DesignHeight="100" d:DesignWidth="300"
-             commonUi:StateHelper.State="{Binding Path=Status, Mode=OneWay}">
+             commonUi:StateHelper.State="{Binding ElementName=ControlRoot, Path=WorkItemMonitor.Status, Mode=OneWay}">
 
     <Border x:Name="RootBorder" BorderBrush="Pink" Margin="1" BorderThickness="2" Opacity="0.8"
             DataContext="{Binding ElementName=ControlRoot, Path=WorkItemMonitor}">

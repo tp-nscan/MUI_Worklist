@@ -16,6 +16,7 @@ namespace WorkflowWorklist.ViewModels
         bool IsRunning { get; }
         string Name { get; }
         string Message { get; }
+        string Status { get; }
         bool WasRun { get; }
         WorkItemStatus WorkItemStatus { get; set; }
     }

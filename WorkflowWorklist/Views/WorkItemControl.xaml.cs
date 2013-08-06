@@ -12,7 +12,13 @@ namespace WorkflowWorklist.Views
 
         public static readonly DependencyProperty WorkItemControllerProperty =
              DependencyProperty.Register("WorkItemController", typeof(IWorkItemControllerVm),
-             typeof(WorkItemControl));
+             typeof(WorkItemControl), new FrameworkPropertyMetadata(OnCurrentTimePropertyChanged));
+
+        private static void OnCurrentTimePropertyChanged(DependencyObject source,
+        DependencyPropertyChangedEventArgs e)
+        {
+            
+        }
 
         public IWorkItemControllerVm WorkItemController
         {

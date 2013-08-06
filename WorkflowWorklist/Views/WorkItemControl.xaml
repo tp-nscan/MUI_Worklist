@@ -12,7 +12,7 @@
         
         <!--<TextBlock Text="{Binding WorkItemMonitorVm.WorkItemStatus }"></TextBlock>-->
 
-        <views:WorkItemMonitorControl x:Name="WorkItemMonitorControl" DataContext="{Binding WorkItemMonitorVm}" />
+        <views:WorkItemMonitorControl x:Name="WorkItemMonitorControl" WorkItemMonitor="{Binding WorkItemMonitorVm}" />
 
     </Grid>
     
