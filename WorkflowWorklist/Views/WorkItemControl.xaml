@@ -11,31 +11,43 @@
              commonUi:StateHelper.State="{Binding ElementName=ControlRoot, Path=WorkItemController.WorkItemMonitorVm.Status, Mode=OneWay}">
 
 
-    <!--<Border x:Name="RootBorder" BorderBrush="Pink" Margin="1" BorderThickness="2"
-            DataContext="{Binding ElementName=ControlRoot, Path=WorkItemMonitor}">-->
-
-    <Border x:Name="RootBorder" BorderBrush="Pink" Margin="1" BorderThickness="2"
-            DataContext="{Binding ElementName=ControlRoot, Path=WorkItemController}" >
+    <Border x:Name="RootBorder" DataContext="{Binding ElementName=ControlRoot, Path=WorkItemController}" Height="Auto" >
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WorkItemStatus">
                 <VisualState x:Name="None">
                 	<Storyboard>
-                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="button">
+                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RunWorkItem">
                 			<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                		</ObjectAnimationUsingKeyFrames>
+                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="WorkItemMonitorControl">
+                			<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
                 		</ObjectAnimationUsingKeyFrames>
                 	</Storyboard>
                 </VisualState>
                 <VisualState x:Name="Cancelled">
                     <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="button">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RunWorkItem">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="WorkItemMonitorControl">
+                        	<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
                 <VisualState x:Name="Completed">
+                	<Storyboard>
+                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="WorkItemMonitorControl">
+                			<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                		</ObjectAnimationUsingKeyFrames>
+                	</Storyboard>
                 </VisualState>
                 <VisualState x:Name="Error">
+                	<Storyboard>
+                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="WorkItemMonitorControl">
+                			<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                		</ObjectAnimationUsingKeyFrames>
+                	</Storyboard>
                 </VisualState>
                 <VisualState x:Name="Running">
                 </VisualState>
@@ -44,36 +56,37 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <Grid >
-        
         <StackPanel>
             
-            <TextBlock Text="{Binding WorkItemMonitorVm.WorkItemStatus }"/>
-            
-            <Button x:Name="button" Content="Add" Margin="5" Command="{Binding IterativeFunctionVm.Submit}" Visibility="Collapsed"/>
-            
-            <views:WorkItemMonitorControl x:Name="WorkItemMonitorControl" WorkItemMonitor="{Binding WorkItemMonitorVm}" />
-            
-        </StackPanel>
+    		<Grid x:Name="RunWorkItem" Visibility="Collapsed">
+    			<Canvas>
+    				<Canvas.Background>
+    					<SolidColorBrush Color="{DynamicResource AccentColor}" />
+    				</Canvas.Background>
+    			</Canvas>
 
+    			<Grid Margin="4,8">
+    				<Grid.RowDefinitions>
+    					<RowDefinition Height="*"/>
+    					<RowDefinition Height="Auto"/>
+    				</Grid.RowDefinitions>
+    				<Grid.ColumnDefinitions>
+    					<ColumnDefinition Width="*"/>
+    					<ColumnDefinition Width="*"/>
+    				</Grid.ColumnDefinitions>
 
-    </Grid>
+    				<TextBlock Grid.Row="0" Grid.Column="0" Margin="2" Text="{Binding IterativeFunctionVm.Name}"/>
+    				<TextBlock Grid.Row="0" Grid.Column="1" Margin="2" Text="{Binding IterativeFunctionVm.Guid}"/>
+    				<TextBlock Grid.Row="1" Grid.Column="0" Margin="2" Text="{Binding WorkItemMonitorVm.Status}"/>
+    				<Button x:Name="Button" Grid.Row="1" Grid.Column="1" Content="Run" Command="{Binding IterativeFunctionVm.Submit}"/>
+                        
+    			</Grid>
+    		</Grid>
+
+    		<views:WorkItemMonitorControl x:Name="WorkItemMonitorControl" WorkItemMonitor="{Binding WorkItemMonitorVm}" />
+            
+    	</StackPanel>
     
     </Border>
-
-
-
-    <!--<Grid DataContext="{Binding ElementName=ControlRoot, Path=WorkItemController}" >
-
-        <StackPanel>
-
-            <TextBlock Text="{Binding WorkItemMonitorVm.WorkItemStatus }"/>
-
-            <Button Content="Add" Margin="5" Command="{Binding IterativeFunctionVm.Submit}"/>
-
-            <views:WorkItemMonitorControl x:Name="WorkItemMonitorControl" WorkItemMonitor="{Binding WorkItemMonitorVm}" />
-        </StackPanel>
-
-    </Grid>-->
 
 </UserControl>
