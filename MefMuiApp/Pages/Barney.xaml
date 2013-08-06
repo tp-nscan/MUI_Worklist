@@ -1,27 +1,27 @@
 ﻿<UserControl x:Class="MefMuiApp.Pages.Barney"
+             x:Name="ControlRoot"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:WorkflowWorklist.Views;assembly=WorkflowWorklist"
+             xmlns:commonUi="clr-namespace:CommonUI;assembly=CommonUI"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid >
+             d:DesignHeight="300" d:DesignWidth="300"
+             commonUi:StateHelper.State="{Binding ElementName=ControlRoot, Path=WorkItemMonitor.Status, Mode=OneWay}">
+
         
-        <StackPanel>
-
-            <Button 
-                Content="Add"
-                Margin="5"
-                Command="{Binding IterativeWorkItemVm.IterativeFunctionVm.Submit}"/>
-
-            <TextBlock Text="{Binding IterativeWorkItemVm.WorkItemResultVm.Result}"/>
-
-            <views:WorkItemControl WorkItemController="{Binding IterativeWorkItemVm}"/>
-
-        </StackPanel>
+        <Grid >
         
-       
+            <StackPanel>
+
+                <views:WorkItemControl WorkItemController="{Binding IterativeWorkItemVm}"/>
+
+                <TextBlock Text="{Binding IterativeWorkItemVm.WorkItemResultVm.Result}"/>
+
+            </StackPanel>
         
-    </Grid>
+        </Grid>
+
+
 </UserControl>
