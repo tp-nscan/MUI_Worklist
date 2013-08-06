@@ -15,7 +15,7 @@ namespace MefMuiApp.ViewModels
 
         public void OnImportsSatisfied()
         {
-            WorklistIterativeClientVm = new IterativeWorkItemVm<string>
+            IterativeWorkItemVm = new IterativeWorkItemVm<string>
                 (
                     worklist: Worklist,
                     iterativeFunctionVm: iterativeFunctionVm,
@@ -37,14 +37,14 @@ namespace MefMuiApp.ViewModels
             }
         };
 
-        IterativeWorkItemVm<string> _worklistIterativeClientVm;
-        public IterativeWorkItemVm<string> WorklistIterativeClientVm
+        IWorkItemControllerVm _worklistIterativeClientVm;
+        public IWorkItemControllerVm IterativeWorkItemVm
         {
             get { return _worklistIterativeClientVm; }
             set
             {
                 _worklistIterativeClientVm = value;
-                OnPropertyChanged("WorklistIterativeClientVm");
+                OnPropertyChanged("IterativeWorkItemVm");
             }
         }
     }

@@ -12,18 +12,13 @@ namespace MefMuiApp.ViewModels
 
         protected override void ProcessResult(string result)
         {
-            Result = result;
+            base.ProcessResult(result);
+            OnPropertyChanged("StringResult");
         }
 
-        private string _result;
-        public string Result
+        public string StringResult
         {
             get { return _result; }
-            set
-            {
-                _result = value;
-                OnPropertyChanged("Result");
-            }
         }
     }
 }

@@ -11,7 +11,7 @@
              d:DesignHeight="1400" d:DesignWidth="400">
 	<UserControl.Resources>
 		<DataTemplate x:Key="WorkItemTemplate">
-			<local:WorkItemMonitorControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+			<local:WorkItemMonitorControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch" WorkItemMonitor="{Binding}" />
 		</DataTemplate>
 	</UserControl.Resources>
 

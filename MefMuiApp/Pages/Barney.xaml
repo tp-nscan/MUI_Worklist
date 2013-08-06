@@ -13,11 +13,11 @@
             <Button 
                 Content="Add"
                 Margin="5"
-                Command="{Binding WorklistIterativeClientVm.IterativeFunctionVm.Submit}"/>
+                Command="{Binding IterativeWorkItemVm.IterativeFunctionVm.Submit}"/>
 
-            <TextBlock Text="{Binding WorklistIterativeClientVm.WorklistResultVm.Result}"/>
+            <TextBlock Text="{Binding IterativeWorkItemVm.WorkItemResultVm.Result}"/>
 
-            <views:WorkItemControl WorkItemController="{Binding WorklistIterativeClientVm}"/>
+            <views:WorkItemControl WorkItemController="{Binding IterativeWorkItemVm}"/>
 
         </StackPanel>
         

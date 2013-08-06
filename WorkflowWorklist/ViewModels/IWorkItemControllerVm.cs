@@ -6,5 +6,6 @@ namespace WorkflowWorklist.ViewModels
     {
         ISubmitFunctionVm SubmitFunctionVm { get; }
         IWorkItemMonitorVm WorkItemMonitorVm { get; }
+        IWorkItemResultVm WorkItemResultVm { get; }
     }
 }

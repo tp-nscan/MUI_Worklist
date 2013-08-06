@@ -77,6 +77,7 @@ namespace WorkflowWorklist.ViewModels
             Message = e.Message;
             WorkItemStatus = e.WorkItemInfo.WorkItemStatus;
             Name = e.WorkItemInfo.Name;
+            OnPropertyChanged("Guid");
         }
 
         private readonly Guid _guid;
@@ -139,16 +140,17 @@ namespace WorkflowWorklist.ViewModels
                 OnPropertyChanged("Completed");
                 OnPropertyChanged("IsRunning");
                 OnPropertyChanged("HasError");
+                OnPropertyChanged("Status");
                 OnPropertyChanged("WasRun");
                 OnPropertyChanged("WorkItemStatus");
                 CommandManager.InvalidateRequerySuggested();
             }
         }
 
-        //public string Status
-        //{
-        //    get { return WorkItemStatus.ToString(); }
-        //}
+        public string Status
+        {
+            get { return WorkItemStatus.ToString(); }
+        }
 
         public bool WasRun
         {

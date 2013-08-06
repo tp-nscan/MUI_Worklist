@@ -8,6 +8,7 @@ namespace WorkflowWorklist.ViewModels
     public interface IWorkItemResultVm : INotifyPropertyChanged
     {
         Guid Guid { get; }
+        object Result { get; }
         IWorklist Worklist { get; }
     }
 
@@ -26,7 +27,14 @@ namespace WorkflowWorklist.ViewModels
             get { return _guid; }
         }
 
+        protected T _result;
+        public object Result
+        {
+            get { return _result; }
+        }
+
         private readonly IWorklist _worklist;
+
         public IWorklist Worklist
         {
             get { return _worklist; }
@@ -60,7 +68,11 @@ namespace WorkflowWorklist.ViewModels
             }
         }
 
-        protected abstract void ProcessResult(T result);
+        protected virtual void ProcessResult(T result)
+        {
+            _result = result;
+            OnPropertyChanged("Result");
+        }
 
     }
 }
