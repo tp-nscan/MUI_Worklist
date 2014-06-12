@@ -11,48 +11,48 @@
              commonUi:StateHelper.State="{Binding Path=Status, Mode=OneWay}">
 
     <Border x:Name="RootBorder" BorderBrush="Pink" Margin="1" BorderThickness="2" Opacity="0.8">
-		
-		<VisualStateManager.VisualStateGroups>
+        
+        <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="WorkItemStatus">
                 <VisualState x:Name="Cancelled">
-            		<Storyboard>
-            			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RootBorder">
-            				<EasingDoubleKeyFrame KeyTime="0" Value="0.5"/>
-            			</DoubleAnimationUsingKeyFrames>
-            		</Storyboard>
-            	</VisualState>
+                    <Storyboard>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RootBorder">
+                            <EasingDoubleKeyFrame KeyTime="0" Value="0.5"/>
+                        </DoubleAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
                 <VisualState x:Name="Completed">
-                	<Storyboard>
-                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush)" Storyboard.TargetName="RootBorder">
-                			<DiscreteObjectKeyFrame KeyTime="0">
-                				<DiscreteObjectKeyFrame.Value>
-                					<SolidColorBrush Color="#F0F0"/>
-                				</DiscreteObjectKeyFrame.Value>
-                			</DiscreteObjectKeyFrame>
-                		</ObjectAnimationUsingKeyFrames>
-                	</Storyboard>
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush)" Storyboard.TargetName="RootBorder">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <SolidColorBrush Color="#F0F0"/>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
                 </VisualState>
                 <VisualState x:Name="Error">
-                	<Storyboard>
-                		<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RootBorder">
-                			<EasingDoubleKeyFrame KeyTime="0" Value="0.5"/>
-                		</DoubleAnimationUsingKeyFrames>
-                		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush)" Storyboard.TargetName="RootBorder">
-                			<DiscreteObjectKeyFrame KeyTime="0">
-                				<DiscreteObjectKeyFrame.Value>
-                					<SolidColorBrush Color="#FF00"/>
-                				</DiscreteObjectKeyFrame.Value>
-                			</DiscreteObjectKeyFrame>
-                		</ObjectAnimationUsingKeyFrames>
-                	</Storyboard>
+                    <Storyboard>
+                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RootBorder">
+                            <EasingDoubleKeyFrame KeyTime="0" Value="0.5"/>
+                        </DoubleAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush)" Storyboard.TargetName="RootBorder">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <SolidColorBrush Color="#FF00"/>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
                 </VisualState>
                 <VisualState x:Name="Running">
                     <Storyboard>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Button">
-                        	<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
                         </ObjectAnimationUsingKeyFrames>
                         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RootBorder">
-                        	<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                            <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
                         </DoubleAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
@@ -73,12 +73,12 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-		<Grid>
-		<Canvas>
-			<Canvas.Background>
-				<SolidColorBrush Color="{DynamicResource AccentColor}" />
-			</Canvas.Background>
-		</Canvas>
+        <Grid>
+        <Canvas>
+            <Canvas.Background>
+                <SolidColorBrush Color="{DynamicResource AccentColor}" />
+            </Canvas.Background>
+        </Canvas>
 
         <Grid Margin="4,8">
             <Grid.RowDefinitions>
@@ -99,6 +99,6 @@
             <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding Status}"/>
             <Button x:Name="Button" Grid.Row="3" Grid.Column="1" Content="CancelTask" Command="{Binding Cancel}" Visibility="Collapsed"/>
         </Grid>
-		</Grid>
+        </Grid>
     </Border>
 </UserControl>

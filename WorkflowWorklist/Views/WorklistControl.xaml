@@ -9,11 +9,11 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance {x:Type design:DesignWorklistVm}, IsDesignTimeCreatable=True}"
              d:DesignHeight="1400" d:DesignWidth="400">
-	<UserControl.Resources>
-		<DataTemplate x:Key="WorkItemTemplate">
-			<local:WorkItemControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
-		</DataTemplate>
-	</UserControl.Resources>
+    <UserControl.Resources>
+        <DataTemplate x:Key="WorkItemTemplate">
+            <local:WorkItemControl VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+        </DataTemplate>
+    </UserControl.Resources>
 
     <Border BorderBrush="{DynamicResource ItemBorder}" BorderThickness="1">
 
@@ -25,34 +25,25 @@
                 <Button 
                         Content="Add"
                         Margin="5"
-                        Grid.ColumnSpan="3"
                         Command="{Binding Add}"/>
 
                 <Button 
-                        Content="Start" 
-                        Grid.Row="2"
-                        Grid.Column="0"
+                        Content="Start"
                         Margin="5"
                         Command="{Binding Start}"/>
 
                 <Button 
                         Content="Stop" 
-                        Grid.Row="2"
-                        Grid.Column="1"
                         Margin="5"
                         Command="{Binding Stop}"/>
 
                 <Button 
-                        Content="Clean" 
-                        Grid.Row="2"
-                        Grid.Column="2"
+                        Content="Clean"
                         Margin="5"
                         Command="{Binding Clean}"/>
 
                 <Button 
-                        Content="Clear" 
-                        Grid.Row="2"
-                        Grid.Column="2"
+                        Content="Clear"
                         Margin="5"
                         Command="{Binding Clear}"/>
 
@@ -65,5 +56,5 @@
         </DockPanel>
         
         
-	</Border>
+    </Border>
 </UserControl>
