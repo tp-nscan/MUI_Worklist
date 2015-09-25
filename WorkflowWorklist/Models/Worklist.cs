@@ -70,7 +70,9 @@ namespace WorkflowWorklist.Models
                 if (workItem.Guid == taskId)
                 {
                     workItem.Cancel();
-                    _worklistEvent.OnNext(new WorklistEventArgs(this, workItem, WorklistEventType.ItemCancelled, string.Empty));
+                    _worklistEvent.OnNext(
+                        new WorklistEventArgs(this, workItem, WorklistEventType.ItemCancelled, string.Empty)
+                        );
                 }
             }
         }
